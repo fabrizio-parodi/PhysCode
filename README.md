@@ -20,6 +20,7 @@ Scegli le istruzioni per il tuo sistema:
 - [macOS](#macos)
 - [Windows con WSL2](#windows-con-wsl2)
 - [Linux](#linux)
+- [Note tecniche: WSL1/WSL2, tastiera, file e macchina virtuale](NOTE_TECNICHE.md)
 
 Non occorre installare separatamente Python, ROOT, Geant4 o Emacs.
 Per account WSL, tastiera italiana, scambio di file e macchina virtuale consulta
@@ -62,11 +63,14 @@ Prosegui con [Scaricare il progetto](#scaricare-il-progetto).
 ### Windows con WSL2
 
 I comandi del laboratorio si eseguono in **Ubuntu/WSL**, mentre VS Code si
-installa su Windows. Serve WSL2 con supporto grafico WSLg.
+installa su Windows. Il percorso principale descritto qui usa WSL2 con WSLg;
+la procedura alternativa WSL1 con server X esterno è nelle note tecniche.
 Prima di iniziare aggiorna Windows. Per questo setup usa WSL2 sia su Windows 11
 sia sulle versioni di Windows 10 compatibili con WSLg; non serve un X-server
-separato. Per verificare un'installazione esistente consulta la
-[nota sulla versione di WSL](NOTE_TECNICHE.md#verificare-la-versione-di-wsl).
+separato. Se hai già WSL1, oppure devi scegliere tra le due versioni, leggi
+[Verificare la versione di WSL](NOTE_TECNICHE.md#verificare-la-versione-di-wsl).
+Le note includono i comandi di selezione e conversione, l'abilitazione manuale
+dei componenti Windows e la [grafica WSL1 con VcXsrv/XLaunch](NOTE_TECNICHE.md#grafica-su-wsl1-con-vcxsrv-e-xlaunch).
 
 Se Ubuntu/WSL2 è già configurato e le applicazioni grafiche funzionano, passa
 direttamente all'installazione di Pixi. Altrimenti apri PowerShell come
@@ -312,6 +316,9 @@ Se usi lo ZIP, scarica la nuova versione in una cartella separata e conserva
 i tuoi file prima di spostarli.
 
 ## Se qualcosa non funziona
+
+Le [note tecniche](NOTE_TECNICHE.md) raccolgono le procedure dettagliate per
+WSL1/WSL2, account e password, tastiera italiana e scambio dei file.
 
 Se le difficoltà persistono, chiedi assistenza a un docente o tutor. Una macchina
 virtuale può essere un'alternativa concordata per il corso: vedi

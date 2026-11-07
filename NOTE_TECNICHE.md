@@ -3,6 +3,21 @@
 Queste note completano il [README](README.md). Consultale quando serve un
 chiarimento su WSL, tastiera, file o configurazioni alternative.
 
+## Indice
+
+- [Verificare la versione di WSL](#verificare-la-versione-di-wsl)
+- [Scegliere WSL1 o WSL2](#scegliere-wsl1-o-wsl2)
+- [Installare o aggiornare WSL](#installare-o-aggiornare-wsl)
+- [Selezionare la versione e convertire una distribuzione](#selezionare-la-versione-e-convertire-una-distribuzione)
+- [Abilitazione manuale dei componenti Windows](#abilitazione-manuale-dei-componenti-windows)
+- [Grafica WSL2 con WSLg](#grafica-wsl2-con-wslg)
+- [Grafica WSL1 con VcXsrv e XLaunch](#grafica-su-wsl1-con-vcxsrv-e-xlaunch)
+- [Account Ubuntu e password](#account-ubuntu-e-password)
+- [Tastiera italiana e caratteri speciali](#tastiera-italiana-e-caratteri-speciali)
+- [Scambiare file tra Windows e Ubuntu](#scambiare-file-tra-windows-e-ubuntu)
+- [AlphaPlot con Flatpak](#alphaplot-installato-con-flatpak)
+- [Macchina virtuale](#usare-una-macchina-virtuale)
+
 ## Verificare la versione di WSL
 
 In **PowerShell**, esegui:
@@ -11,18 +26,175 @@ In **PowerShell**, esegui:
 wsl -l -v
 ```
 
-La colonna `VERSION` della distribuzione usata per il laboratorio deve indicare
-`2`. Il nome può essere `Ubuntu-24.04`, `Ubuntu` o un altro nome già presente.
-Non reinstallare la distribuzione soltanto perché il nome è diverso.
+La colonna `VERSION` indica `1` o `2` per ogni distribuzione installata.
+Non indica la release di Ubuntu: `Ubuntu-24.04` può essere eseguito con WSL1 o
+WSL2. Il nome può anche essere `Ubuntu` o un altro nome già presente; nei comandi
+successivi usa esattamente quello mostrato nell'elenco.
 
-Se la distribuzione è ancora WSL1, salva il lavoro e chiedi assistenza per la
-conversione a WSL2. Se WSLg non è disponibile, segui la
+Per vedere la versione di Windows premi `Win+R`, digita `winver` e premi Invio.
+Per informazioni sul componente WSL puoi usare `wsl --version`, se disponibile.
+Quest'ultimo comando non sostituisce `wsl -l -v`: descrive il software WSL,
+non la modalità della singola distribuzione.
+
+## Scegliere WSL1 o WSL2
+
+| Configurazione | Caratteristiche | Grafica |
+|---|---|---|
+| WSL2 | Kernel Linux in una macchina virtuale gestita da Windows; modalità prevista per il setup Pixi del corso. Richiede supporto alla virtualizzazione. | WSLg, quando disponibile. |
+| WSL1 | Livello di compatibilità per le chiamate Linux; può essere utile su configurazioni che non consentono WSL2. | Server X esterno, ad esempio VcXsrv. |
+
+**Windows 10 non obbliga a usare WSL1.** Può usare WSL2 se la versione di Windows
+e il computer ne soddisfano i requisiti. Anche Windows 11 può ospitare
+distribuzioni WSL1, se il relativo componente è abilitato. Per il confronto
+vedi la [documentazione Microsoft](https://learn.microsoft.com/en-us/windows/wsl/compare-versions).
+
+Per il laboratorio scegli WSL2 con WSLg quando possibile. Le istruzioni WSL1
+qui sotto mantengono il percorso alternativo con server X esterno, ma la
+compatibilità dell'intero ambiente Pixi e della grafica Geant4 su WSL1 va
+verificata con le prove del README. Un server X risolve il collegamento grafico,
+non le eventuali incompatibilità delle librerie o delle chiamate di sistema.
+
+## Installare o aggiornare WSL
+
+Apri **PowerShell come amministratore**: cerca PowerShell nel menu Start,
+premi il tasto destro e scegli **Esegui come amministratore**. Aggiorna Windows
+prima di procedere e verifica la connessione Internet.
+
+Se WSL è già presente:
+
+```powershell
+wsl --update
+```
+
+Per una nuova installazione con Ubuntu 24.04:
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+Riavvia se richiesto. Se il nome della distribuzione non è riconosciuto,
+controlla l'elenco disponibile con `wsl --list --online`.
+Se questi comandi non sono supportati dalla tua installazione di Windows,
+consulta l'[abilitazione manuale](#abilitazione-manuale-dei-componenti-windows).
+
+## Selezionare la versione e convertire una distribuzione
+
+Per scegliere la modalità delle **nuove distribuzioni**, esegui uno dei seguenti
+comandi in PowerShell, secondo la configurazione scelta:
+
+```powershell
+# WSL2, percorso previsto per il laboratorio
+wsl --set-default-version 2
+```
+
+Oppure, se hai concordato l'uso di WSL1:
+
+```powershell
+wsl --set-default-version 1
+```
+
+Questi comandi non convertono le distribuzioni già installate.
+Per convertire Ubuntu 24.04 da WSL1 a WSL2:
+
+```powershell
+wsl --set-version Ubuntu-24.04 2
+wsl -l -v
+```
+
+La conversione inversa, quando prevista dalla configurazione scelta, usa:
+
+```powershell
+wsl --set-version Ubuntu-24.04 1
+```
+
+Sostituisci `Ubuntu-24.04` con il tuo nome di distribuzione. Prima della
+conversione salva il lavoro e una copia dei file importanti; l'operazione può
+richiedere tempo. Per un backup completo puoi usare, da PowerShell:
+
+```powershell
+wsl --export Ubuntu-24.04 "$env:USERPROFILE\Desktop\ubuntu-backup.tar"
+```
+
+Verifica di avere spazio per il file di backup. Le modalità di selezione,
+conversione ed esportazione sono descritte nei
+[comandi WSL di Microsoft](https://learn.microsoft.com/en-us/windows/wsl/basic-commands).
+
+## Abilitazione manuale dei componenti Windows
+
+Questa procedura serve quando l'installazione automatica non è disponibile o
+quando manca un componente Windows richiesto. Da PowerShell come amministratore,
+per abilitare il componente necessario a WSL1:
+
+```powershell
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+```
+
+Per WSL2 abilita anche la piattaforma di virtualizzazione:
+
+```powershell
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+
+Riavvia Windows. WSL2 richiede inoltre che la virtualizzazione del processore
+sia disponibile e abilitata nel BIOS/UEFI. Nelle installazioni meno recenti
+può essere necessario anche il pacchetto di aggiornamento del kernel Linux:
+segui la [procedura manuale Microsoft](https://learn.microsoft.com/en-us/windows/wsl/install-manual),
+che distingue requisiti e passaggi per WSL1 e WSL2.
+
+Completata la preparazione, seleziona la versione predefinita e installa Ubuntu
+con il comando disponibile sul tuo sistema o dal Microsoft Store. Al primo
+accesso crea l'[account personale Ubuntu](#account-ubuntu-e-password), poi torna
+al [README](README.md#installare-lambiente-del-laboratorio) per Pixi.
+
+## Grafica WSL2 con WSLg
+
+WSLg integra le finestre Linux nel desktop Windows. Richiede Windows 10 build
+19044 o successiva, oppure Windows 11, oltre ai requisiti indicati nella
 [guida Microsoft](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps).
-Il supporto grafico richiede Windows 10 build 19044 o successiva, oppure
-Windows 11, con i requisiti descritti nella guida.
+La disponibilità di WSL2, da sola, non dimostra che WSLg sia disponibile.
 
-Questo laboratorio usa WSLg: le procedure per WSL1 con VcXsrv/XLaunch non
-servono. Non è necessario disabilitare il controllo degli accessi di un server X.
+Aggiorna WSL con `wsl --update`. Per applicare l'aggiornamento, dopo aver salvato
+il lavoro in tutte le sessioni WSL, esegui da PowerShell:
+
+```powershell
+wsl --shutdown
+```
+
+Riapri Ubuntu. Non occorre avviare XLaunch né impostare manualmente `DISPLAY`:
+WSLg configura il collegamento grafico. Non aggiungere alla shell le
+impostazioni `DISPLAY` della procedura WSL1 qui sotto.
+
+## Grafica su WSL1 con VcXsrv e XLaunch
+
+WSL1 non include WSLg. Per usare Emacs grafico, ROOT o altre applicazioni X11,
+installa su Windows [VcXsrv](https://github.com/marchaesen/vcxsrv), disponibile
+anche dalla [pagina SourceForge](https://sourceforge.net/projects/vcxsrv/).
+
+Prima di ogni sessione di lavoro:
+
+1. Avvia **XLaunch** dal menu Start.
+2. Scegli **Multiple windows**, display `0`, poi **Start no client**.
+3. Completa la configurazione del server X. La procedura del materiale del
+   corso indica l'opzione **Disable access control**: se viene usata, disabilita
+   l'autenticazione dei client X; limita l'accesso al computer locale e mantieni
+   le restrizioni del firewall, senza consentire connessioni da reti pubbliche.
+4. Lascia VcXsrv in esecuzione mentre usi le applicazioni grafiche Linux.
+5. Nel terminale **Ubuntu su WSL1**, prima di avviare l'applicazione, imposta:
+
+```bash
+export DISPLAY=localhost:0.0
+```
+
+Se il profilo del server usa un altro numero di display, adegua il valore.
+Avvia quindi, dalla cartella del laboratorio, `pixi run --locked editor` oppure
+una delle prove grafiche del README. Se compare `cannot open display`, controlla
+che VcXsrv sia avviato, che il display corrisponda e che il firewall non blocchi
+il collegamento locale. Se le finestre si aprono ma Geant4 fallisce, il problema
+può riguardare OpenGL: conserva l'errore e chiedi assistenza.
+
+Questa impostazione `DISPLAY` riguarda WSL1. WSL2 con server X esterno può
+richiedere un indirizzo diverso in base alla rete; non applicare automaticamente
+`localhost:0.0` a WSL2. Se WSLg funziona, usa il percorso WSLg sopra.
 
 ## Account Ubuntu e password
 
