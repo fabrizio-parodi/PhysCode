@@ -1,7 +1,10 @@
-# Laboratorio MCS — Guida per gli studenti
+# Software per Lab1 Calcolo e LabMCS
 
-Questa guida spiega come installare e usare gli strumenti del laboratorio sul
-proprio computer: Python, ROOT/PyROOT, Geant4, JupyterLab, Emacs, VS Code e AlphaPlot.
+Questa guida permette di preparare il proprio PC o laptop per lavorare con gli
+strumenti dei corsi **Lab1 (Calcolo)** e **LabMCS**, come in Aula Informatica.
+Include Python, ROOT/PyROOT, Geant4, JupyterLab, Emacs, VS Code e AlphaPlot.
+Usa poi i programmi indicati per il tuo corso: AlphaPlot è previsto in particolare
+per Lab1, mentre gli esempi Geant4 riguardano LabMCS.
 
 Pixi installa l'ambiente scientifico del corso nella cartella del progetto.
 VS Code e AlphaPlot si installano separatamente sul computer.
@@ -19,6 +22,8 @@ Scegli le istruzioni per il tuo sistema:
 - [Linux](#linux)
 
 Non occorre installare separatamente Python, ROOT, Geant4 o Emacs.
+Per account WSL, tastiera italiana, scambio di file e macchina virtuale consulta
+le [note tecniche](NOTE_TECNICHE.md).
 
 ## Installare Pixi e preparare il computer
 
@@ -41,6 +46,10 @@ brew install --cask visual-studio-code
 pixi --version
 ```
 
+Se stai installando Homebrew per la prima volta, completa i comandi mostrati
+dall'installer sotto **Next steps** prima di proseguire: servono a rendere
+disponibile `brew` nel terminale.
+
 Su Mac Apple Silicon usa un Terminale nativo. Per verificare:
 
 ```bash
@@ -54,17 +63,25 @@ Prosegui con [Scaricare il progetto](#scaricare-il-progetto).
 
 I comandi del laboratorio si eseguono in **Ubuntu/WSL**, mentre VS Code si
 installa su Windows. Serve WSL2 con supporto grafico WSLg.
+Prima di iniziare aggiorna Windows. Per questo setup usa WSL2 sia su Windows 11
+sia sulle versioni di Windows 10 compatibili con WSLg; non serve un X-server
+separato. Per verificare un'installazione esistente consulta la
+[nota sulla versione di WSL](NOTE_TECNICHE.md#verificare-la-versione-di-wsl).
 
 Se Ubuntu/WSL2 è già configurato e le applicazioni grafiche funzionano, passa
 direttamente all'installazione di Pixi. Altrimenti apri PowerShell come
 amministratore ed esegui:
 
 ```powershell
-wsl --install -d Ubuntu
+wsl --install -d Ubuntu-24.04
 wsl --update
 ```
 
 Riavvia se richiesto, apri Ubuntu e completa la creazione dell'utente Linux.
+Scegli un nome utente e una password: durante la digitazione della password
+non vengono mostrati caratteri né asterischi. Digita la password, premi Invio
+e ripetila quando richiesto. Questa è la password dell'utente Ubuntu, usata
+anche per i comandi `sudo`; può essere diversa da quella di Windows.
 Per informazioni consulta la [guida Microsoft a WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps).
 
 Installa [VS Code per Windows](https://code.visualstudio.com/download) e
@@ -87,6 +104,8 @@ pixi --version
 
 Conserva la cartella del corso nel filesystem Linux, ad esempio `~/labmcs-pixi`.
 Le compilazioni sotto `/mnt/c` possono essere più lente.
+Per aprire la cartella da Esplora file o accedere ai documenti Windows, vedi
+[Scambiare file tra Windows e Ubuntu](NOTE_TECNICHE.md#scambiare-file-tra-windows-e-ubuntu).
 
 ### Linux
 
@@ -176,6 +195,8 @@ l'ambiente scientifico del corso:
 Per JupyterLab apri nel browser l'indirizzo mostrato nel terminale, se non si
 apre automaticamente. Per arrestare il server premi `Ctrl+C` nel terminale.
 Per uscire da Emacs usa `Ctrl+x`, poi `Ctrl+c`.
+Per riconoscere i caratteri speciali usati nei comandi, come `~`, l'apostrofo e
+l'accento grave, consulta la [nota sulla tastiera italiana](NOTE_TECNICHE.md#tastiera-italiana-e-caratteri-speciali).
 
 ### Compilare un esercizio Geant4
 
@@ -221,6 +242,7 @@ La sola selezione dell'interprete Python non attiva l'ambiente per CMake.
 
 ## Installare e usare AlphaPlot
 
+Per Lab1 installa anche AlphaPlot, come richiesto dalle attività di Calcolo.
 AlphaPlot si avvia dal sistema operativo. Puoi scambiare i dati con Python,
 ROOT e Geant4 mediante file CSV o TSV.
 
@@ -248,6 +270,8 @@ explorer.exe .
 ```
 
 Esplora file mostrerà la posizione da usare anche in AlphaPlot.
+Se AlphaPlot è stato installato dentro Ubuntu tramite Flatpak, il comando di
+avvio è indicato nella [nota dedicata](NOTE_TECNICHE.md#alphaplot-installato-con-flatpak).
 
 ### Su Linux
 
@@ -288,6 +312,10 @@ Se usi lo ZIP, scarica la nuova versione in una cartella separata e conserva
 i tuoi file prima di spostarli.
 
 ## Se qualcosa non funziona
+
+Se le difficoltà persistono, chiedi assistenza a un docente o tutor. Una macchina
+virtuale può essere un'alternativa concordata per il corso: vedi
+[Usare una macchina virtuale](NOTE_TECNICHE.md#usare-una-macchina-virtuale).
 
 | Problema | Cosa fare |
 |---|---|
