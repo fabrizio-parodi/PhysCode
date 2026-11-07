@@ -1,349 +1,361 @@
-# Software per Lab1 Calcolo e LabMCS
+# Software per lavorare sul proprio PC/laptop come in Aula Informatica
 
-Questa guida permette di preparare il proprio PC o laptop per lavorare con gli
-strumenti dei corsi **Lab1 (Calcolo)** e **LabMCS**, come in Aula Informatica.
-Include Python, ROOT/PyROOT, Geant4, JupyterLab, Emacs, VS Code e AlphaPlot.
-Usa poi i programmi indicati per il tuo corso: AlphaPlot è previsto in particolare
-per Lab1, mentre gli esempi Geant4 riguardano LabMCS.
+Versione 2.5 - 18/9/2026
 
-Pixi installa l'ambiente scientifico del corso nella cartella del progetto.
-VS Code e AlphaPlot si installano separatamente sul computer.
+Istruzioni comuni per i corsi Lab1 (Calcolo) e LabMCS.
 
-## Prima di iniziare
+Le istruzioni dipendono dal sistema operativo di cui si dispone.
 
-Servono una connessione Internet e diversi GB di spazio libero. Come margine
-per installazione, compilazioni ed esercizi, prepara circa 15–20 GB liberi.
-Il primo download può richiedere tempo, soprattutto per i dati di Geant4.
+Installazione dell’ambiente scientifico integrata con Pixi.
 
-Scegli le istruzioni per il tuo sistema:
+[Windows](#windows) · [Linux](#linux) · [Mac OsX](#mac-osx) · [Macchina virtuale](#macchina-virtuale) · **[Note tecniche](NOTE_TECNICHE.md)**
 
-- [macOS](#macos)
-- [Windows con WSL2](#windows-con-wsl2)
-- [Linux](#linux)
-- [Note tecniche: WSL1/WSL2, tastiera, file e macchina virtuale](NOTE_TECNICHE.md)
+## Windows
 
-Non occorre installare separatamente Python, ROOT, Geant4 o Emacs.
-Per account WSL, tastiera italiana, scambio di file e macchina virtuale consulta
-le [note tecniche](NOTE_TECNICHE.md).
+### Windows Subsystem for Linux
 
-## Installare Pixi e preparare il computer
+Assicuratevi che il vostro sistema operativo sia aggiornato (le istruzioni nel seguito sono valide sia per Windows 10 che per Windows11, con piccole varianti)
 
-### macOS
+Assicuratevi che il sistema operativo sia aggiornato all’ultima versione disponibile
 
-Apri il Terminale. Se non hai già i Command Line Tools di Apple, esegui:
+Cercare il terminale di comando Command Prompt e aprirlo premendo il tasto destro del mouse Run as Administrator
 
-```bash
-xcode-select --install
-```
-
-Completa la procedura nella finestra che si apre. Se gli strumenti sono già
-installati, puoi proseguire.
-
-Con [Homebrew](https://brew.sh/) installato, esegui:
-
-```bash
-brew install pixi
-brew install --cask visual-studio-code
-pixi --version
-```
-
-Se stai installando Homebrew per la prima volta, completa i comandi mostrati
-dall'installer sotto **Next steps** prima di proseguire: servono a rendere
-disponibile `brew` nel terminale.
-
-Su Mac Apple Silicon usa un Terminale nativo. Per verificare:
-
-```bash
-uname -m
-```
-
-Il risultato atteso è `arm64` su Apple Silicon e `x86_64` su Intel.
-Prosegui con [Scaricare il progetto](#scaricare-il-progetto).
-
-### Windows con WSL2
-
-I comandi del laboratorio si eseguono in **Ubuntu/WSL**, mentre VS Code si
-installa su Windows. Il percorso principale descritto qui usa WSL2 con WSLg;
-la procedura alternativa WSL1 con server X esterno è nelle note tecniche.
-Prima di iniziare aggiorna Windows. Per questo setup usa WSL2 sia su Windows 11
-sia sulle versioni di Windows 10 compatibili con WSLg; non serve un X-server
-separato. Se hai già WSL1, oppure devi scegliere tra le due versioni, leggi
-[Verificare la versione di WSL](NOTE_TECNICHE.md#verificare-la-versione-di-wsl).
-Le note includono i comandi di selezione e conversione, l'abilitazione manuale
-dei componenti Windows e la [grafica WSL1 con VcXsrv/XLaunch](NOTE_TECNICHE.md#grafica-su-wsl1-con-vcxsrv-e-xlaunch).
-
-Se Ubuntu/WSL2 è già configurato e le applicazioni grafiche funzionano, passa
-direttamente all'installazione di Pixi. Altrimenti apri PowerShell come
-amministratore ed esegui:
+Aggiornare wsl
 
 ```powershell
-wsl --install -d Ubuntu-24.04
 wsl --update
 ```
 
-Riavvia se richiesto, apri Ubuntu e completa la creazione dell'utente Linux.
-Scegli un nome utente e una password: durante la digitazione della password
-non vengono mostrati caratteri né asterischi. Digita la password, premi Invio
-e ripetila quando richiesto. Questa è la password dell'utente Ubuntu, usata
-anche per i comandi `sudo`; può essere diversa da quella di Windows.
-Per informazioni consulta la [guida Microsoft a WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps).
+Se il comando non dovesse funzionare:
 
-Installa [VS Code per Windows](https://code.visualstudio.com/download) e
-l'estensione **WSL** di Microsoft.
+Controllare di aver accesso alla rete
 
-Nel terminale **Ubuntu**, esegui:
+Eventualmente installata manualmente WSL con il comando
+
+```powershell
+wsl --install
+```
+
+o se non fosse disponibile sul vostro sistema dando il comando
+
+```powershell
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+```
+
+e poi:
+
+```powershell
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+
+### Scegliere WSL1 o WSL2
+
+#### Windows 10
+
+Sul terminale dare il comando
+
+```powershell
+wsl --set-default-version 1
+```
+
+#### Windows 11
+
+Sul terminale dare il comando
+
+```powershell
+wsl --set-default-version 2
+```
+
+Installare Ubuntu24 con il comando
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+Riavviare ed accedere al sistema Linux (sotto Ubuntu)
+
+ATTENZIONE ALLA PASSWORD: È NECESSARIO inserire la password richiesta al primo accesso sul sistema Linux.La password NON è visibile durante la digitazione quindi assicurarsi di inserirla correttamente (e annotarla), e solo DOPO premere “Invio”.Se la procedura non viene seguita correttamente, l’utente del sistema Linux risulta essere “root”, cioè l'amministratore di sistema (o super-utente). In questo caso la procedura di installazione va ripetuta.
+
+[solo per Windows 10] Installare un X-server (operazione necessaria per poter usare, sotto WSL1, applicazioni grafiche): scaricate ed installate VcXsrv (disponibile su https://sourceforge.net/projects/vcxsrv)
+
+### Installazione software aggiuntivo
+
+Aprite il terminale di Ubuntu.
+
+Se Pixi non è già installato, date i comandi:
 
 ```bash
-sudo apt update
-sudo apt install -y curl ca-certificates libgl1-mesa-dri mesa-utils
 curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
 bash /tmp/install-pixi.sh
 ```
 
-Chiudi e riapri il terminale Ubuntu, poi verifica:
+Chiudete e riaprite il terminale.
+
+Quindi date il comando:
 
 ```bash
-pixi --version
+git clone https://github.com/fabrizio-parodi/CalcoloXFisica.git
 ```
 
-Conserva la cartella del corso nel filesystem Linux, ad esempio `~/labmcs-pixi`.
-Le compilazioni sotto `/mnt/c` possono essere più lente.
-Per aprire la cartella da Esplora file o accedere ai documenti Windows, vedi
-[Scambiare file tra Windows e Ubuntu](NOTE_TECNICHE.md#scambiare-file-tra-windows-e-ubuntu).
-
-### Linux
-
-Su Ubuntu/Debian, nel terminale della tua sessione grafica:
-
-```bash
-sudo apt update
-sudo apt install -y curl ca-certificates libgl1-mesa-dri mesa-utils
-curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
-bash /tmp/install-pixi.sh
-```
-
-Chiudi e riapri il terminale, poi esegui `pixi --version`.
-Installa VS Code seguendo le [istruzioni per Linux](https://code.visualstudio.com/docs/setup/linux).
-Su altre distribuzioni usa il gestore del sistema per installare le librerie
-grafiche equivalenti. Su Wayland deve essere disponibile anche XWayland per
-le applicazioni X11. Questo ambiente è destinato a distribuzioni con glibc.
-
-## Scaricare il progetto
-
-Apri il repository indicato per il corso. Puoi scaricarlo con **Code → Download
-ZIP**, se disponibile, ed estrarre l'archivio, oppure clonarlo con Git:
-
-```bash
-git clone URL_DEL_REPOSITORY labmcs-pixi
-```
-
-Sostituisci `URL_DEL_REPOSITORY` con l'indirizzo fornito per il corso.
-Per usare `git clone` deve essere installato Git; su Ubuntu puoi installarlo con
-`sudo apt install git`. Il download ZIP non richiede Git.
-
-Apri il terminale nella cartella estratta o clonata. Ad esempio, se si trova
-nella tua cartella personale:
-
-```bash
-cd ~/labmcs-pixi
-```
-
-La cartella deve contenere `pixi.toml`, `pixi.lock`, `scripts/`, `cmake/` ed
-`examples/`. Se manca `pixi.lock`, chiedi la copia completa del progetto.
-
-## Installare l'ambiente del laboratorio
-
-Dalla cartella del progetto esegui:
+Il software scientifico è installato tramite Pixi: Python, ROOT, Geant4,
+compilatori C/C++, CMake ed Emacs sono inclusi nell’ambiente del corso.
+Aprite il terminale nella cartella del progetto che contiene `pixi.toml` e
+`pixi.lock`, quindi date il comando:
 
 ```bash
 pixi install --locked
 ```
 
-Attendi il completamento. Pixi scarica i pacchetti adatti al tuo computer.
-Non occorrono privilegi di amministratore per questo comando.
+Una volta terminato, solo per il primo anno, date anche il comando, dalla
+cartella in cui avete clonato `CalcoloXFisica`:
 
-Mantieni `pixi.toml` e `pixi.lock` come forniti per il corso: definiscono
-l'ambiente da usare negli esercizi.
+```bash
+source CalcoloXFisica/installAlphaPlot
+```
 
-## Verificare l'installazione
+Per eseguire AlphaPlot serve il comando:
 
-Esegui un comando alla volta, aspettando che termini:
+```bash
+flatpak run io.github.narunlifescience.AlphaPlot
+```
 
-| Comando | Risultato atteso |
-|---|---|
-| `pixi run --locked check` | Controllo Python/PyROOT completato |
-| `pixi run --locked g4-check` | Compilazione Geant4 ed esecuzione di tre eventi |
-| `pixi run --locked root-gui` | Finestra con un istogramma ROOT |
-| `pixi run --locked g4-gui` | Interfaccia grafica con la geometria Geant4 |
+A questo punto il software necessario è disponibile.
 
-Chiudi la finestra ROOT per terminare il relativo test. Per uscire
-dall'interfaccia Geant4 usa `exit` nella sua console.
+[Solo per WSL1] Prima di ogni sessione di lavoro fate partire X-server (icona XLaunch) e, nei menù mostrati in partenza, cliccare sulla voce "Disable access control"
 
-Se un comando termina con un errore, conserva il messaggio completo e consulta
-[Se qualcosa non funziona](#se-qualcosa-non-funziona).
+### Informazioni importanti
 
-## Usare gli strumenti del laboratorio
+#### Se avete la tastiera italiana e volete che diventi il default su Windows e WSL
 
-Apri il terminale nella cartella del progetto. I comandi seguenti usano
-l'ambiente scientifico del corso:
+Impostate tastiera italiana su Windows
 
-| Attività | Comando |
-|---|---|
-| Aprire Python | `pixi run --locked python` |
-| Eseguire uno script | `pixi run --locked python mio_script.py` |
-| Aprire ROOT | `pixi run --locked root -l` |
-| Aprire JupyterLab | `pixi run --locked notebook` |
-| Aprire Emacs grafico | `pixi run --locked editor` |
-| Aprire Emacs nel terminale | `pixi run --locked editor-term` |
+Da WSL date il comando
 
-Per JupyterLab apri nel browser l'indirizzo mostrato nel terminale, se non si
-apre automaticamente. Per arrestare il server premi `Ctrl+C` nel terminale.
-Per uscire da Emacs usa `Ctrl+x`, poi `Ctrl+c`.
-Per riconoscere i caratteri speciali usati nei comandi, come `~`, l'apostrofo e
-l'accento grave, consulta la [nota sulla tastiera italiana](NOTE_TECNICHE.md#tastiera-italiana-e-caratteri-speciali).
+```bash
+sudo dpkg-reconfigure locales
+```
 
-### Compilare un esercizio Geant4
+selezionate dal menù che comparirà la tastiera italiana
 
-Dalla cartella del laboratorio entra nell'ambiente:
+(si fa con la barra spaziatrice) e  de-selezionate
+
+quella inglese
+
+Fate reboot di Windows
+
+<a id="caratteri-speciali"></a>
+
+#### Come produrre facilmente i caratteri ~ e \` con tastiera italiana
+
+Scaricare la "Current Version" di AutoHotKey da https://www.autohotkey.com/
+
+Scaricare lo script [keysetup.ahk](https://drive.google.com/file/d/18K3zTnvYTa_hywJYgyN9gkIX4jaEuT5d/view?usp=sharing), assicurandosi che mantenga .ahk come estensione
+
+Aprire il percorso file alla cartella "Esecuzione Automatica" premendo WIN+R e scrivendo shell:startup nella barra di ricerca
+
+Trasferire lo script "keysetup" in questa cartella, che permetterà la sua attivazione automatica ad ogni accensione di Windows
+
+Riavviare il PC
+
+Per usare i caratteri speciali basterà procedere come segue:
+
+"tilde" (~)                     ---> Premere Alt + -  (trattino della tastiera)
+
+apostrofo per Root (`) ---> Premere Alt + '   (apostrofo normale)
+
+<a id="accesso-ai-file"></a>
+
+#### Come accedere a Windows/Linux da Linux/Windows
+
+Attenzione: si consiglia vivamente di accedere a Windows da Linux
+
+(e non viceversa per evitare  di corrompere il filesystem di Linux)
+
+**Da Linux**
+
+/mnt/c (per disco C), provate ad esempio con il comando per listare i files:
+
+```bash
+ls /mnt/c
+```
+
+E poi quindi sull’account principale:
+
+```bash
+ls /mnt/c/Users/ACCOUNT_PRINCIPALE/Desktop
+```
+
+**Da Windows**
+
+Dalla versione 1903 di Windows basta andare su \\wsl$\Ubuntu-24.04\home\user
+
+Per versioni meno recenti invece: da Windows sul File Explorer digitare: C:\[USERNAME]\AppData\Local\Packages quindi entrate nella cartella che inizia con CanonicalGroup…. e poi da questa su LocalState\rootfs
+
+## Linux
+
+La descrizione vale per una qualunque distribuzione Linux. L’ambiente è
+equivalente a quello usato in laboratorio (distribuzione Xubuntu).
+Non servono configurazioni aggiuntive: gli strumenti di sviluppo quali il
+compilatore C++ e l’editor Emacs sono installati nell’ambiente Pixi.
+
+### Software aggiuntivo
+
+Aprite il terminale sulla HOME (si ottiene dando il comando `cd` da terminale).
+
+Se Pixi non è già installato, date i comandi:
+
+```bash
+curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
+bash /tmp/install-pixi.sh
+```
+
+Chiudete e riaprite il terminale.
+
+Date il comando:
+
+```bash
+git clone https://github.com/fabrizio-parodi/CalcoloXFisica.git
+```
+
+Il software scientifico è installato tramite Pixi: Python, ROOT, Geant4,
+compilatori C/C++, CMake ed Emacs sono inclusi nell’ambiente del corso.
+Aprite il terminale nella cartella del progetto che contiene `pixi.toml` e
+`pixi.lock`, quindi date il comando:
+
+```bash
+pixi install --locked
+```
+
+La procedura Pixi sostituisce l’installazione del software scientifico su
+Ubuntu 24, Ubuntu 22 e sulle altre distribuzioni, inclusi il download e la
+configurazione manuale di ROOT. Per attivare l’ambiente date `pixi shell` dalla
+cartella del progetto.
+
+Una volta terminato, solo per il primo anno, date anche il comando, dalla
+cartella in cui avete clonato `CalcoloXFisica`:
+
+```bash
+source CalcoloXFisica/installAlphaPlot
+```
+
+Nel caso vi fossero problemi con Flatpak per una certa versione di Linux,
+installate AlphaPlot seguendo le istruzioni su
+[https://alphaplot.sourceforge.io/](https://alphaplot.sourceforge.io/).
+
+## Mac OsX
+
+Mac OsX è Unix, quindi di fatto molto simile a Linux.
+
+### Software aggiuntivo
+
+Verificare di avere il command line di Xcode funzionante (e, altrimenti,
+installatelo) con il comando:
+
+```bash
+xcode-select --install
+```
+
+Aprite il terminale sulla HOME (si ottiene dando il comando `cd` da terminale)
+e date il comando:
+
+```bash
+git clone https://github.com/fabrizio-parodi/CalcoloXFisica.git
+```
+
+Installate [Homebrew](https://brew.sh/) se non è già presente.
+Attenzione ai comandi, spesso Homebrew (che è il primo software che viene
+installato, propedeutico per installare software successivo) è da settare con
+una serie di comandi! Questi sono riportati dopo la dicitura **“==> Next steps”**.
+
+Installate Pixi con:
+
+```bash
+brew install pixi
+```
+
+Il software scientifico è installato tramite Pixi: Python, ROOT, Geant4,
+compilatori C/C++, CMake ed Emacs sono inclusi nell’ambiente del corso.
+Aprite il terminale nella cartella del progetto che contiene `pixi.toml` e
+`pixi.lock`, quindi date il comando:
+
+```bash
+pixi install --locked
+```
+
+### Installazione di ROOT
+
+L’installazione di ROOT avviene insieme all’ambiente Pixi. Questa procedura
+sostituisce le opzioni di installazione, download dei binari e ricompilazione
+di ROOT. La configurazione si attiva con `pixi shell` dalla cartella del
+progetto: non occorre aggiungere `thisroot.sh` ai file di configurazione della shell.
+
+Seguite eventuali messaggi di errore che possono presentarsi durante
+l’installazione. Se l’installazione fallisce, confrontatevi con un prof/tutor
+con il relativo messaggio di errore, perché possiamo risolvere.
+
+Installate AlphaPlot seguendo le istruzioni su
+[https://alphaplot.sourceforge.io/](https://alphaplot.sourceforge.io/).
+
+## Usare l’ambiente Pixi
+
+Dalla cartella del progetto che contiene `pixi.toml`, date:
 
 ```bash
 pixi shell
 ```
 
-Poi spostati nella cartella dei sorgenti dell'esercizio ed esegui:
+Nella shell sono disponibili gli strumenti installati per il corso. Date
+`exit` per uscire. Potete anche eseguire direttamente i programmi:
+
+```bash
+pixi run --locked python
+pixi run --locked root -l
+pixi run --locked emacs
+```
+
+Per compilare un esercizio, dopo essere entrati in `pixi shell`, spostatevi
+nella cartella dei suoi sorgenti e date:
 
 ```bash
 cmake -S . -B build
 cmake --build build --parallel 2
 ```
 
-Usa il nome dell'eseguibile indicato nell'esercizio per avviare la simulazione.
-La configurazione delle dipendenze viene caricata automaticamente.
-Per uscire dalla shell del laboratorio esegui `exit`.
-
-## Usare VS Code
-
-Apri la cartella del progetto con **File → Open Folder** oppure, se il comando
-è disponibile nel terminale:
+Per verificare l’ambiente, dalla cartella del progetto:
 
 ```bash
-code .
+pixi run --locked check
+pixi run --locked g4-check
+pixi run --locked root-gui
+pixi run --locked g4-gui
 ```
 
-Su Windows lancia `code .` da Ubuntu. La finestra deve indicare una connessione
-**WSL**. Installa le estensioni consigliate quando VS Code le propone.
+<a id="macchina-virtuale"></a>
 
-Per Python, apri la palette dei comandi e scegli **Python: Select Interpreter**.
-Seleziona l'interprete del progetto:
+## If all else fails…
 
-```text
-.pixi/envs/default/bin/python
-```
+Se nessuna delle procedure illustrate funziona suggeriamo l’installazione di una macchina virtuale.
 
-Scegli lo stesso ambiente come kernel dei notebook.
-Per compilare dal terminale integrato di VS Code, entra prima in `pixi shell`.
-La sola selezione dell'interprete Python non attiva l'ambiente per CMake.
+Ecco i passi da seguire in questo caso:
 
-## Installare e usare AlphaPlot
+[Abilitare la virtualizzazione su Windows](https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-c5578302-6e43-4b4b-a449-8ced115f58e1)
 
-Per Lab1 installa anche AlphaPlot, come richiesto dalle attività di Calcolo.
-AlphaPlot si avvia dal sistema operativo. Puoi scambiare i dati con Python,
-ROOT e Geant4 mediante file CSV o TSV.
+Installare [VirtualBox 7.1.0](https://www.virtualbox.org/)
 
-### Su macOS
+Installare anche l’ Extension Pack di VirtualBox (sempre versione 7.1.0)
 
-Scarica `alphaplot_v1.02_x64_clang.dmg` dalla
-[release ufficiale 1.02](https://sourceforge.net/projects/alphaplot/files/1.02/).
-Apri il DMG e copia l'applicazione in Applicazioni.
+Scaricare la macchina virtuale:
 
-Il pacchetto è per Intel: su Apple Silicon può essere richiesta l'installazione
-di Rosetta. Questa riguarda AlphaPlot; continua a usare Pixi nel Terminale nativo.
-Se macOS blocca l'avvio o l'applicazione non funziona, conserva il messaggio e
-chiedi assistenza per il corso.
+Ubuntu 24.04: [Ubuntu64.ova](https://drive.google.com/file/d/15HLRRobGohfF7JslssCji1r2R16mEvuc/view?usp=drive_link)
 
-### Su Windows
+Da VirtualBox, selezionare la voce del menù “File → Import appliance” e caricare il file .ova precedentemente scompattato
 
-Scarica e installa `alphaplot_v1.02_x64_msvc2019.exe` dalla
-[stessa release ufficiale](https://sourceforge.net/projects/alphaplot/files/1.02/).
+(attenzione: affinché questa operazione vada a buon fine dovete avere almeno 10 GB di spazio disco liberi).
 
-Per raggiungere da Windows i dati salvati in WSL, apri il terminale Ubuntu nella
-cartella dei dati ed esegui:
+Collegatevi (username: vboxuser  password: calcolo24 )
 
-```bash
-explorer.exe .
-```
+### Regolate il display
 
-Esplora file mostrerà la posizione da usare anche in AlphaPlot.
-Se AlphaPlot è stato installato dentro Ubuntu tramite Flatpak, il comando di
-avvio è indicato nella [nota dedicata](NOTE_TECNICHE.md#alphaplot-installato-con-flatpak).
+Sul client Linux  nel menu generale (in alto a sinistra) cercate Settings → Display e regolate una risoluzione simile a quella del vostro schermo.
 
-### Su Linux
-
-Puoi installare AlphaPlot dalla
-[pagina Flathub dell'applicazione](https://flathub.org/apps/io.github.narunlifescience.AlphaPlot)
-se Flatpak è configurato sul tuo sistema.
-
-In alternativa, su Ubuntu/Debian, apri un terminale fuori da `pixi shell` e compila
-la release con questi comandi:
-
-```bash
-sudo apt update
-sudo apt install -y git build-essential qtbase5-dev qttools5-dev \
-  qttools5-dev-tools qtscript5-dev libqt5svg5-dev libqt5opengl5-dev \
-  libqt5datavisualization5-dev libgsl-dev
-git clone --depth 1 --branch 1.02 \
-  https://github.com/narunlifescience/AlphaPlot.git alphaplot-src
-cd alphaplot-src
-qmake alphaplot.pro
-make -j2
-sudo make install
-alphaplot
-```
-
-## Ricevere gli aggiornamenti del corso
-
-Se hai scaricato il progetto con Git, dalla sua cartella esegui quando viene
-annunciato un aggiornamento:
-
-```bash
-git pull
-pixi install --locked
-```
-
-Se Git segnala modifiche locali o conflitti, conserva il tuo lavoro e chiedi
-assistenza prima di proseguire. Salva gli esercizi con nomi e cartelle dedicati.
-Se usi lo ZIP, scarica la nuova versione in una cartella separata e conserva
-i tuoi file prima di spostarli.
-
-## Se qualcosa non funziona
-
-Le [note tecniche](NOTE_TECNICHE.md) raccolgono le procedure dettagliate per
-WSL1/WSL2, account e password, tastiera italiana e scambio dei file.
-
-Se le difficoltà persistono, chiedi assistenza a un docente o tutor. Una macchina
-virtuale può essere un'alternativa concordata per il corso: vedi
-[Usare una macchina virtuale](NOTE_TECNICHE.md#usare-una-macchina-virtuale).
-
-| Problema | Cosa fare |
-|---|---|
-| `pixi: command not found` | Chiudi e riapri il terminale dopo l'installazione di Pixi. |
-| Pixi non trova il progetto | Entra nella cartella che contiene `pixi.toml`. |
-| `import ROOT` non funziona in uno script | Eseguilo con `pixi run --locked python mio_script.py`. In VS Code verifica l'interprete selezionato. |
-| Su Windows i comandi Linux non funzionano | Usa Ubuntu/WSL o il terminale WSL di VS Code. |
-| Errore di lock o pacchetti incompatibili | Controlla di avere tutti i file della stessa versione del progetto e segnala l'errore. |
-| Errore HDF5 o percorsi Xcode inesistenti | Ripeti la configurazione dentro `pixi shell` usando una nuova cartella di build. Se persiste, segnala l'errore completo. |
-
-Se su WSL le finestre si aprono ma la visualizzazione Geant4 fallisce, puoi
-provare il rendering software:
-
-```bash
-LIBGL_ALWAYS_SOFTWARE=1 pixi run --locked g4-gui
-```
-
-Quando chiedi assistenza, indica il sistema operativo, il comando eseguito e
-l'output completo dell'errore. Aggiungi anche l'output di:
-
-```bash
-pixi --version
-pixi info
-```
+Potete eventualmente aggiustare ancora il fattore di scala da VirtualBox andando nel menù: View → Virtual Screen 1
