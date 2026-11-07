@@ -1,126 +1,76 @@
-# Laboratorio MCS con Pixi
+# Laboratorio MCS — Guida per gli studenti
 
-Setup nativo per macOS Intel/Apple Silicon, Linux e Windows con WSL2.
-Si assume disponibile una sessione grafica: desktop su Linux, WSLg su Windows.
-Su macOS l'esempio Geant4 usa Qt nativo; non richiede XQuartz.
+Questa guida spiega come installare e usare gli strumenti del laboratorio sul
+proprio computer: Python, ROOT/PyROOT, Geant4, JupyterLab, Emacs, VS Code e AlphaPlot.
 
-## Cosa viene installato
+Pixi installa l'ambiente scientifico del corso nella cartella del progetto.
+VS Code e AlphaPlot si installano separatamente sul computer.
 
-| Software | Gestione |
-|---|---|
-| Python 3.12, NumPy, SciPy, Matplotlib, pandas | Pixi, ambiente del progetto |
-| ROOT e PyROOT | Pixi, pacchetto `root_base` |
-| Geant4 e relativi dati fisici | Pixi, pacchetti conda-forge |
-| CMake, Ninja e compilatori C/C++ | Pixi |
-| JupyterLab e ipykernel | Pixi |
-| Emacs | Pixi, con avvio grafico o nel terminale |
-| VS Code desktop | Installazione sul sistema ospite |
-| AlphaPlot | Installazione sul sistema ospite, descritta sotto |
+## Prima di iniziare
 
-`root_base` contiene ROOT/PyROOT e permette di aggiungere esplicitamente gli
-strumenti del corso. Non serve installare anche ROOT, Geant4 o Python con
-Homebrew/apt. VS Code e AlphaPlot si installano una volta per computer.
+Servono una connessione Internet e diversi GB di spazio libero. Come margine
+per installazione, compilazioni ed esercizi, prepara circa 15–20 GB liberi.
+Il primo download può richiedere tempo, soprattutto per i dati di Geant4.
 
-Pixi evita il desktop Linux e la VM di Docker su Mac. Non riduce la dimensione
-intrinseca di ROOT, Geant4 e dei dataset: prevedere diversi GB di download/spazio.
-Per iniziare suggerisco 15–20 GB liberi, come margine operativo, non come misura
-dell'ambiente. La prima installazione è molto più onerosa degli avvii successivi.
+Scegli le istruzioni per il tuo sistema:
 
-## 1. Preparazione del Mac del docente
+- [macOS](#macos)
+- [Windows con WSL2](#windows-con-wsl2)
+- [Linux](#linux)
 
-Nel Terminale, se mancano gli strumenti Apple:
+Non occorre installare separatamente Python, ROOT, Geant4 o Emacs.
+
+## Installare Pixi e preparare il computer
+
+### macOS
+
+Apri il Terminale. Se non hai già i Command Line Tools di Apple, esegui:
 
 ```bash
 xcode-select --install
 ```
 
-Con Homebrew già installato:
+Completa la procedura nella finestra che si apre. Se gli strumenti sono già
+installati, puoi proseguire.
+
+Con [Homebrew](https://brew.sh/) installato, esegui:
 
 ```bash
 brew install pixi
 brew install --cask visual-studio-code
 pixi --version
+```
+
+Su Mac Apple Silicon usa un Terminale nativo. Per verificare:
+
+```bash
 uname -m
 ```
 
-Per installare Homebrew seguire [brew.sh](https://brew.sh/).
-Su Apple Silicon usare un Terminale nativo: `uname -m` deve restituire `arm64`.
-Non eseguire Pixi sotto Rosetta per questo progetto. Su Intel è atteso `x86_64`.
+Il risultato atteso è `arm64` su Apple Silicon e `x86_64` su Intel.
+Prosegui con [Scaricare il progetto](#scaricare-il-progetto).
 
-Estrarre questa cartella in una posizione stabile, ad esempio
-`Documenti/labmcs-pixi`, e aprirla nel terminale:
+### Windows con WSL2
 
-```bash
-cd /percorso/della/cartella/labmcs-pixi
-pixi install
-pixi run check
-pixi run g4-check
-pixi run root-gui
-pixi run g4-gui
-```
+I comandi del laboratorio si eseguono in **Ubuntu/WSL**, mentre VS Code si
+installa su Windows. Serve WSL2 con supporto grafico WSLg.
 
-I primi due test controllano Python/PyROOT e compilano/eseguono una simulazione
-Geant4 di tre eventi. Gli ultimi due devono aprire finestre interattive.
-Per terminare Geant4 usare `exit` nella sua interfaccia.
-
-`pixi install` risolve tutte le piattaforme dichiarate, crea `pixi.lock` e installa
-solo i binari per il computer corrente. Se una piattaforma non ha una soluzione,
-la risoluzione può fermarsi anche lavorando su Mac: leggere il nome della
-piattaforma nell'errore. Non rimuoverla per poi dichiararla supportata agli studenti.
-
-### Controllo importante: Geant4 con Qt
-
-Esistono anche build di Geant4 senza Qt. La presenza di un desktop o del solo
-pacchetto Qt non aggiunge il supporto a un Geant4 compilato senza Qt.
-Il progetto grafico usa `find_package(Geant4 REQUIRED qt)` proprio per verificarlo.
-
-Se `pixi run g4-gui` segnala che il componente `qt` manca:
-
-```bash
-pixi list
-pixi search geant4
-```
-
-Verificare nel [feedstock ufficiale conda-forge](https://github.com/conda-forge/geant4-feedstock)
-quale variante Qt è disponibile per la versione e le piattaforme del corso.
-Vincolarla nel manifest con versione/build effettivamente presenti nel catalogo,
-oppure scegliere una release che includa Qt, poi rigenerare il lock e ripetere i
-test. Non considerare superato il collaudo grafico se funziona solo `g4-check`.
-Il manifest fornito lascia scegliere la release al solver: la compatibilità Qt
-va confermata durante questo primo collaudo, prima della distribuzione.
-
-## 2. Installazione degli studenti: macOS
-
-Installare gli strumenti Apple, Pixi e gli editor come nella sezione 1.
-Scaricare ed estrarre la cartella fornita dal docente, che deve includere
-`pixi.lock`. Nella cartella eseguire:
-
-```bash
-pixi install --locked
-pixi run --locked check
-pixi run --locked g4-check
-pixi run --locked root-gui
-pixi run --locked g4-gui
-```
-
-`--locked` verifica che il manifest corrisponda al lock e impedisce di cambiarne
-le risoluzioni. Non copiare l'ambiente `.pixi` dal computer del docente.
-
-## 3. Installazione degli studenti: Windows con WSL2
-
-Se WSL2/WSLg sono già funzionanti, non reinstallarli.
-Per una nuova configurazione, da PowerShell come amministratore:
+Se Ubuntu/WSL2 è già configurato e le applicazioni grafiche funzionano, passa
+direttamente all'installazione di Pixi. Altrimenti apri PowerShell come
+amministratore ed esegui:
 
 ```powershell
 wsl --install -d Ubuntu
 wsl --update
 ```
 
-Riavviare se richiesto e completare la creazione dell'utente Ubuntu.
-Usare una versione di Windows supportata da WSLg.
+Riavvia se richiesto, apri Ubuntu e completa la creazione dell'utente Linux.
+Per informazioni consulta la [guida Microsoft a WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps).
 
-Installare VS Code **su Windows**, con l'estensione **WSL** di Microsoft.
-Aprire Ubuntu/WSL e installare gli strumenti di sistema:
+Installa [VS Code per Windows](https://code.visualstudio.com/download) e
+l'estensione **WSL** di Microsoft.
+
+Nel terminale **Ubuntu**, esegui:
 
 ```bash
 sudo apt update
@@ -129,93 +79,187 @@ curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
 bash /tmp/install-pixi.sh
 ```
 
-Riaprire il terminale Ubuntu e verificare `pixi --version`.
-Conservare il progetto nel filesystem Linux, ad esempio `~/labmcs-pixi`,
-per evitare la lentezza dei file di compilazione sotto `/mnt/c`.
-Estrarre o clonare lì la cartella distribuita e lanciare:
+Chiudi e riapri il terminale Ubuntu, poi verifica:
+
+```bash
+pixi --version
+```
+
+Conserva la cartella del corso nel filesystem Linux, ad esempio `~/labmcs-pixi`.
+Le compilazioni sotto `/mnt/c` possono essere più lente.
+
+### Linux
+
+Su Ubuntu/Debian, nel terminale della tua sessione grafica:
+
+```bash
+sudo apt update
+sudo apt install -y curl ca-certificates libgl1-mesa-dri mesa-utils
+curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
+bash /tmp/install-pixi.sh
+```
+
+Chiudi e riapri il terminale, poi esegui `pixi --version`.
+Installa VS Code seguendo le [istruzioni per Linux](https://code.visualstudio.com/docs/setup/linux).
+Su altre distribuzioni usa il gestore del sistema per installare le librerie
+grafiche equivalenti. Su Wayland deve essere disponibile anche XWayland per
+le applicazioni X11. Questo ambiente è destinato a distribuzioni con glibc.
+
+## Scaricare il progetto
+
+Apri il repository indicato per il corso. Puoi scaricarlo con **Code → Download
+ZIP**, se disponibile, ed estrarre l'archivio, oppure clonarlo con Git:
+
+```bash
+git clone URL_DEL_REPOSITORY labmcs-pixi
+```
+
+Sostituisci `URL_DEL_REPOSITORY` con l'indirizzo fornito per il corso.
+Per usare `git clone` deve essere installato Git; su Ubuntu puoi installarlo con
+`sudo apt install git`. Il download ZIP non richiede Git.
+
+Apri il terminale nella cartella estratta o clonata. Ad esempio, se si trova
+nella tua cartella personale:
 
 ```bash
 cd ~/labmcs-pixi
+```
+
+La cartella deve contenere `pixi.toml`, `pixi.lock`, `scripts/`, `cmake/` ed
+`examples/`. Se manca `pixi.lock`, chiedi la copia completa del progetto.
+
+## Installare l'ambiente del laboratorio
+
+Dalla cartella del progetto esegui:
+
+```bash
 pixi install --locked
-pixi run --locked check
-pixi run --locked g4-check
-pixi run --locked root-gui
-pixi run --locked g4-gui
+```
+
+Attendi il completamento. Pixi scarica i pacchetti adatti al tuo computer.
+Non occorrono privilegi di amministratore per questo comando.
+
+Mantieni `pixi.toml` e `pixi.lock` come forniti per il corso: definiscono
+l'ambiente da usare negli esercizi.
+
+## Verificare l'installazione
+
+Esegui un comando alla volta, aspettando che termini:
+
+| Comando | Risultato atteso |
+|---|---|
+| `pixi run --locked check` | Controllo Python/PyROOT completato |
+| `pixi run --locked g4-check` | Compilazione Geant4 ed esecuzione di tre eventi |
+| `pixi run --locked root-gui` | Finestra con un istogramma ROOT |
+| `pixi run --locked g4-gui` | Interfaccia grafica con la geometria Geant4 |
+
+Chiudi la finestra ROOT per terminare il relativo test. Per uscire
+dall'interfaccia Geant4 usa `exit` nella sua console.
+
+Se un comando termina con un errore, conserva il messaggio completo e consulta
+[Se qualcosa non funziona](#se-qualcosa-non-funziona).
+
+## Usare gli strumenti del laboratorio
+
+Apri il terminale nella cartella del progetto. I comandi seguenti usano
+l'ambiente scientifico del corso:
+
+| Attività | Comando |
+|---|---|
+| Aprire Python | `pixi run --locked python` |
+| Eseguire uno script | `pixi run --locked python mio_script.py` |
+| Aprire ROOT | `pixi run --locked root -l` |
+| Aprire JupyterLab | `pixi run --locked notebook` |
+| Aprire Emacs grafico | `pixi run --locked editor` |
+| Aprire Emacs nel terminale | `pixi run --locked editor-term` |
+
+Per JupyterLab apri nel browser l'indirizzo mostrato nel terminale, se non si
+apre automaticamente. Per arrestare il server premi `Ctrl+C` nel terminale.
+Per uscire da Emacs usa `Ctrl+x`, poi `Ctrl+c`.
+
+### Compilare un esercizio Geant4
+
+Dalla cartella del laboratorio entra nell'ambiente:
+
+```bash
+pixi shell
+```
+
+Poi spostati nella cartella dei sorgenti dell'esercizio ed esegui:
+
+```bash
+cmake -S . -B build
+cmake --build build --parallel 2
+```
+
+Usa il nome dell'eseguibile indicato nell'esercizio per avviare la simulazione.
+La configurazione delle dipendenze viene caricata automaticamente.
+Per uscire dalla shell del laboratorio esegui `exit`.
+
+## Usare VS Code
+
+Apri la cartella del progetto con **File → Open Folder** oppure, se il comando
+è disponibile nel terminale:
+
+```bash
 code .
 ```
 
-La finestra VS Code deve indicare una connessione WSL. I comandi Pixi vanno
-eseguiti nel suo terminale Linux, non nel PowerShell Windows.
-Emacs grafico si avvia dal terminale WSL con `pixi run editor`.
+Su Windows lancia `code .` da Ubuntu. La finestra deve indicare una connessione
+**WSL**. Installa le estensioni consigliate quando VS Code le propone.
 
-In una sessione WSLg funzionante `echo "$DISPLAY"` ha un valore. Non sostituirlo
-con l'indirizzo IP di Windows. Se le finestre si aprono ma OpenGL fallisce,
-provare temporaneamente:
+Per Python, apri la palette dei comandi e scegli **Python: Select Interpreter**.
+Seleziona l'interprete del progetto:
 
-```bash
-LIBGL_ALWAYS_SOFTWARE=1 pixi run --locked g4-gui
+```text
+.pixi/envs/default/bin/python
 ```
 
-## 4. Installazione degli studenti: Linux
+Scegli lo stesso ambiente come kernel dei notebook.
+Per compilare dal terminale integrato di VS Code, entra prima in `pixi shell`.
+La sola selezione dell'interprete Python non attiva l'ambiente per CMake.
 
-Esempio per Ubuntu/Debian con grafica già disponibile:
+## Installare e usare AlphaPlot
 
-```bash
-sudo apt update
-sudo apt install -y curl ca-certificates libgl1-mesa-dri mesa-utils
-curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
-bash /tmp/install-pixi.sh
-```
+AlphaPlot si avvia dal sistema operativo. Puoi scambiare i dati con Python,
+ROOT e Geant4 mediante file CSV o TSV.
 
-Riaprire il terminale. Installare VS Code dal
-[pacchetto ufficiale per la distribuzione](https://code.visualstudio.com/docs/setup/linux).
-Su altre distribuzioni usare i rispettivi gestori per i driver grafici.
+### Su macOS
 
-Entrare nella cartella del corso e lanciare gli stessi cinque comandi della
-sezione 2. Per questo manifest Linux deve usare glibc, come Ubuntu; Alpine/musl
-non è una piattaforma prevista. Su Wayland, per le applicazioni X11 serve XWayland.
+Scarica `alphaplot_v1.02_x64_clang.dmg` dalla
+[release ufficiale 1.02](https://sourceforge.net/projects/alphaplot/files/1.02/).
+Apri il DMG e copia l'applicazione in Applicazioni.
 
-## 5. AlphaPlot
+Il pacchetto è per Intel: su Apple Silicon può essere richiesta l'installazione
+di Rosetta. Questa riguarda AlphaPlot; continua a usare Pixi nel Terminale nativo.
+Se macOS blocca l'avvio o l'applicazione non funziona, conserva il messaggio e
+chiedi assistenza per il corso.
 
-AlphaPlot resta un'applicazione separata dall'ambiente Pixi. Installarlo e
-avviarlo dal sistema ospite evita di mescolare i suoi plugin Qt con quelli del
-laboratorio. Condividere i dati mediante file CSV/TSV.
+### Su Windows
 
-### macOS
+Scarica e installa `alphaplot_v1.02_x64_msvc2019.exe` dalla
+[stessa release ufficiale](https://sourceforge.net/projects/alphaplot/files/1.02/).
 
-Scaricare il file **`alphaplot_v1.02_x64_clang.dmg`** dalla
-[release ufficiale 1.02](https://sourceforge.net/projects/alphaplot/files/1.02/),
-aprire il DMG e copiare l'applicazione in Applicazioni.
-È un pacchetto Intel `x64`: su Apple Silicon richiede Rosetta; macOS può proporne
-l'installazione all'avvio. Non è un binario ARM nativo e la compatibilità sui Mac
-del corso va provata. In caso di blocco consultare il messaggio di macOS e le
-impostazioni Privacy e sicurezza; non disabilitare globalmente Gatekeeper.
-
-Collaudo: aprire un CSV, creare un grafico 2D ed esportarlo in PDF; se il corso
-usa grafici 3D, provarli esplicitamente. L'eventuale uso di Rosetta per AlphaPlot
-non richiede di eseguire sotto Rosetta anche Pixi, ROOT o Geant4.
-
-### Windows/WSL
-
-La via più semplice è installare AlphaPlot **su Windows**, usando l'installer
-`alphaplot_v1.02_x64_msvc2019.exe` dalla stessa release ufficiale.
-Per aprire i dati prodotti in WSL, nella cartella dati eseguire:
+Per raggiungere da Windows i dati salvati in WSL, apri il terminale Ubuntu nella
+cartella dei dati ed esegui:
 
 ```bash
 explorer.exe .
 ```
 
-Si apre la posizione in Esplora file. AlphaPlot su Windows può accedere ai file
-della distribuzione attraverso `\\wsl.localhost\Ubuntu\home\NOMEUTENTE\...`.
-Il nome della distribuzione può differire: verificarlo con `wsl -l -v`.
-Se si desidera anche AlphaPlot dentro WSL, usare la compilazione Linux seguente.
+Esplora file mostrerà la posizione da usare anche in AlphaPlot.
 
-### Linux, oppure AlphaPlot dentro WSL
+### Su Linux
 
-Per compilare la release 1.02 su Ubuntu/Debian, eseguire questi comandi in un
-terminale normale, fuori da `pixi shell` o da ambienti Conda:
+Puoi installare AlphaPlot dalla
+[pagina Flathub dell'applicazione](https://flathub.org/apps/io.github.narunlifescience.AlphaPlot)
+se Flatpak è configurato sul tuo sistema.
+
+In alternativa, su Ubuntu/Debian, apri un terminale fuori da `pixi shell` e compila
+la release con questi comandi:
 
 ```bash
+sudo apt update
 sudo apt install -y git build-essential qtbase5-dev qttools5-dev \
   qttools5-dev-tools qtscript5-dev libqt5svg5-dev libqt5opengl5-dev \
   libqt5datavisualization5-dev libgsl-dev
@@ -228,139 +272,43 @@ sudo make install
 alphaplot
 ```
 
-Questa procedura usa le librerie Qt5 della distribuzione, non quelle di Pixi.
-Per un'installazione senza compilazione su un desktop Linux si può usare il
-[pacchetto Flathub ufficialmente collegato dal progetto](https://flathub.org/apps/io.github.narunlifescience.AlphaPlot),
-tenendo conto che il runtime Flatpak occupa spazio aggiuntivo.
+## Ricevere gli aggiornamenti del corso
 
-## 6. Uso quotidiano
-
-Tutti i comandi Pixi si eseguono dalla cartella del progetto:
+Se hai scaricato il progetto con Git, dalla sua cartella esegui quando viene
+annunciato un aggiornamento:
 
 ```bash
-pixi run --locked python
-pixi run --locked python mio_script.py
-pixi run --locked root -l
-pixi run --locked notebook
-pixi shell
+git pull
+pixi install --locked
 ```
 
-`pixi shell` apre una shell con l'ambiente attivo; `exit` torna alla shell normale.
-Non aggiungere `source thisroot.sh` o `source geant4.sh`: usare l'attivazione di
-Pixi e gli hook dei pacchetti. Non impostare globalmente `LD_LIBRARY_PATH`,
-`DYLD_LIBRARY_PATH` o `QT_PLUGIN_PATH` nel profilo dell'utente.
+Se Git segnala modifiche locali o conflitti, conserva il tuo lavoro e chiedi
+assistenza prima di proseguire. Salva gli esercizi con nomi e cartelle dedicati.
+Se usi lo ZIP, scarica la nuova versione in una cartella separata e conserva
+i tuoi file prima di spostarli.
 
-### VS Code e Jupyter
+## Se qualcosa non funziona
 
-Aprire la cartella con `code .` oppure dal menu di VS Code.
-Installare le estensioni consigliate dal progetto.
-In **Python: Select Interpreter**, scegliere:
+| Problema | Cosa fare |
+|---|---|
+| `pixi: command not found` | Chiudi e riapri il terminale dopo l'installazione di Pixi. |
+| Pixi non trova il progetto | Entra nella cartella che contiene `pixi.toml`. |
+| `import ROOT` non funziona in uno script | Eseguilo con `pixi run --locked python mio_script.py`. In VS Code verifica l'interprete selezionato. |
+| Su Windows i comandi Linux non funzionano | Usa Ubuntu/WSL o il terminale WSL di VS Code. |
+| Errore di lock o pacchetti incompatibili | Controlla di avere tutti i file della stessa versione del progetto e segnala l'errore. |
+| Errore HDF5 o percorsi Xcode inesistenti | Ripeti la configurazione dentro `pixi shell` usando una nuova cartella di build. Se persiste, segnala l'errore completo. |
 
-```text
-<cartella-progetto>/.pixi/envs/default/bin/python
-```
-
-Lo stesso interprete va scelto come kernel dei notebook. Su Windows questo
-percorso va selezionato nella finestra VS Code collegata a WSL.
-I normali comandi `python` nel terminale non sono automaticamente quelli del
-progetto: usare `pixi run python ...` oppure entrare prima in `pixi shell`.
-
-### Emacs
-
-Emacs è incluso nell'ambiente Pixi; non occorre installarlo separatamente.
-Su macOS, Linux e WSL2, dalla cartella del progetto:
+Se su WSL le finestre si aprono ma la visualizzazione Geant4 fallisce, puoi
+provare il rendering software:
 
 ```bash
-pixi run --locked editor
+LIBGL_ALWAYS_SOFTWARE=1 pixi run --locked g4-gui
 ```
 
-Per la versione nel terminale:
+Quando chiedi assistenza, indica il sistema operativo, il comando eseguito e
+l'output completo dell'errore. Aggiungi anche l'output di:
 
 ```bash
-pixi run --locked editor-term
+pixi --version
+pixi info
 ```
-
-Entrambi ereditano l'ambiente Pixi, incluso il Python e la configurazione CMake.
-In Emacs si può avviare Python con `M-x run-python`. Se una configurazione
-personale seleziona un Python esterno, impostare per il laboratorio:
-
-```elisp
-(setq python-shell-interpreter
-      (expand-file-name "bin/python" (getenv "CONDA_PREFIX")))
-```
-
-Su Linux/WSL la finestra richiede la sessione grafica disponibile come previsto.
-Per aggiornare una copia precedente del progetto, il docente può eseguire
-`pixi add "emacs>=30,<32"`, aggiornare il lock e distribuirlo agli studenti.
-
-## 7. Distribuzione del corso: compito del docente
-
-1. Eseguire `pixi install` e i quattro test della sezione 1 sul Mac.
-2. Provare AlphaPlot sul Mac, inclusa l'eventuale esecuzione con Rosetta.
-3. Ripetere installazione, test batch e test grafici su almeno un computer
-   Linux/WSL e sulle architetture che si intendono dichiarare supportate.
-4. Conservare il `pixi.lock` generato insieme a `pixi.toml`, esempi e guida.
-5. Distribuire questi file via Git o ZIP. Escludere `.pixi/`, `build/` e file
-   temporanei. Il lock contiene risoluzioni specifiche per ciascuna piattaforma;
-   non implica binari identici né risultati numerici identici tra architetture.
-6. Agli studenti far usare `pixi install --locked`. Non far rigenerare loro il
-   lock come rimedio automatico agli errori.
-
-Per aggiornare il corso, lavorare su una copia o un ramo, eseguire `pixi update`,
-ripetere i collaudi e distribuire una nuova revisione del lock.
-Registrare anche la versione di Pixi usata dal docente (`pixi --version`).
-
-## Errore HDF5 thread-safe durante la configurazione
-
-La configurazione del laboratorio è ora applicata automaticamente a tutti i
-progetti CMake avviati tramite `pixi run` o dentro `pixi shell`:
-
-- `pixi.toml` carica `scripts/activate.sh`;
-- lo script imposta `CMAKE_TOOLCHAIN_FILE` a `cmake/pixi-toolchain.cmake`;
-- il toolchain preferisce l'ambiente Pixi e disabilita la ricerca dei file di
-  configurazione HDF5 esterni.
-
-Distribuire anche questi due file. Non occorre aggiungere opzioni HDF5 ai comandi
-degli studenti né modificare ogni pacchetto Geant4. Per un pacchetto esterno,
-aprire `pixi shell` dalla cartella del laboratorio, poi spostarsi nei suoi
-sorgenti e usare normalmente `cmake -S . -B build`.
-La correzione vale per nuove build senza un toolchain esplicitamente diverso.
-Per le build già configurate dal docente occorre ricreare una volta la cache
-con `cmake --fresh`; dopo la modifica al manifest riaprire `pixi shell` e
-aggiornare il lock con `pixi install` prima di distribuirlo.
-
-Se CMake trova un HDF5 esterno, ad esempio `/usr/local/lib/cmake/hdf5`, può
-segnalare che manca il supporto thread-safe anche se l'HDF5 di Pixi lo include.
-Il `CMakeLists.txt` aggiornato abilita C e C++, imposta `HDF5_ROOT` sull'ambiente
-attivo e usa il modulo FindHDF5 evitando la configurazione esterna.
-Dopo aver sostituito il file, ricreare la cache (non serve reinstallare i pacchetti):
-
-```bash
-pixi run cmake --fresh -S examples/geant4 -B build/geant4 -G Ninja -DCMAKE_BUILD_TYPE=Release
-pixi run g4-check
-pixi run cmake --fresh -S examples/geant4 -B build/geant4-gui -G Ninja -DCMAKE_BUILD_TYPE=Release -DLAB_GUI=ON
-pixi run g4-gui
-```
-
-Nel log verificare `H5_HAVE_THREADSAFE - found` e il percorso HDF5 sotto
-`.pixi/envs/default`. Non aggirare il controllo forzando a vero il risultato del
-test e non modificare i file installati di Geant4.
-
-## Stato di questo kit
-
-Il manifest, gli script e gli esempi sono predisposti per il collaudo.
-Il kit iniziale non include un lock generato. Una successiva verifica con
-l'ambiente Pixi installato dal docente su macOS Intel e Geant4 11.4.2 ha
-confermato la configurazione CMake e il riconoscimento dell'HDF5 thread-safe
-dopo la correzione sopra. Le finestre native e le altre piattaforme restano da
-collaudare. Il lock del docente va conservato e validato prima della distribuzione.
-
-## Riferimenti
-
-- [Installazione Pixi](https://pixi.prefix.dev/latest/installation/)
-- [Manifest e piattaforme Pixi](https://pixi.prefix.dev/latest/reference/pixi_manifest/)
-- [Pacchetto ROOT conda-forge](https://anaconda.org/conda-forge/root)
-- [Pacchettizzazione Geant4 conda-forge](https://github.com/conda-forge/geant4-feedstock)
-- [Grafica WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps)
-- [AlphaPlot: sorgenti e dipendenze](https://github.com/narunlifescience/AlphaPlot)
-- [AlphaPlot: download 1.02](https://sourceforge.net/projects/alphaplot/files/1.02/)
