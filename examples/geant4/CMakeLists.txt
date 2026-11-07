@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.20)
+project(LabGeant4 LANGUAGES C CXX)
+# Prefer the active Pixi/Conda environment to unrelated host installations.
+# In particular, a host HDF5 config can otherwise override conda's thread-safe HDF5.
+if(DEFINED ENV{CONDA_PREFIX})
+  list(PREPEND CMAKE_PREFIX_PATH "$ENV{CONDA_PREFIX}")
+  set(HDF5_ROOT "$ENV{CONDA_PREFIX}")
+  set(HDF5_NO_FIND_PACKAGE_CONFIG_FILE TRUE)
+endif()
+option(LAB_GUI "Compila con interfaccia grafica Qt" OFF)
+if(LAB_GUI)
+  # Installing Qt alone cannot add GUI support to a noqt Geant4 build.
+  find_package(Geant4 REQUIRED qt)
+else()
+  find_package(Geant4 REQUIRED)
+endif()
+include(${Geant4_USE_FILE})
+add_executable(labg4 main.cc)
+target_compile_features(labg4 PRIVATE cxx_std_17)
+target_link_libraries(labg4 PRIVATE ${Geant4_LIBRARIES})
+if(LAB_GUI)
+  target_compile_definitions(labg4 PRIVATE LAB_GUI)
+endif()
