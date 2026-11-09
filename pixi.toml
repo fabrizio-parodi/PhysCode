@@ -8,7 +8,6 @@ platforms = ["osx-arm64", "osx-64", "linux-64", "linux-aarch64"]
 [dependencies]
 python = "3.12.*"
 root_base = ">=6.34,<7"
-geant4 = ">=11.3,<12"
 numpy = "*"
 scipy = "*"
 matplotlib = "*"
@@ -20,6 +19,7 @@ ninja = "*"
 c-compiler = "*"
 cxx-compiler = "*"
 emacs = ">=30,<32"
+markdown = ">=3.11.3,<4"
 
 [activation]
 scripts = ["scripts/activate.sh"]
@@ -30,9 +30,3 @@ root-gui = "python scripts/root_gui.py"
 notebook = "jupyter lab"
 editor = "emacs"
 editor-term = "emacs -nw"
-g4-configure = "cmake -S examples/geant4 -B build/geant4 -G Ninja -DCMAKE_BUILD_TYPE=Release"
-g4-build = { cmd = "cmake --build build/geant4 --parallel 2", depends-on = ["g4-configure"] }
-g4-check = { cmd = "./build/geant4/labg4", depends-on = ["g4-build"] }
-g4-gui-configure = "cmake -S examples/geant4 -B build/geant4-gui -G Ninja -DCMAKE_BUILD_TYPE=Release -DLAB_GUI=ON"
-g4-gui-build = { cmd = "cmake --build build/geant4-gui --parallel 2", depends-on = ["g4-gui-configure"] }
-g4-gui = { cmd = "./build/geant4-gui/labg4 --gui", depends-on = ["g4-gui-build"] }
