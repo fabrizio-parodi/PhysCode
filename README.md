@@ -6,12 +6,12 @@ Le presenti istruzioni descrivono come installare sul proprio computer il softwa
 per gli insegnamenti dei corsi di Laurea in Fisica e di Laurea Magistrale in Fisica dell’Università di Genova.
 
 La condivisione, il riutilizzo e l’adattamento di questo materiale sono incoraggiati. 
-Salvo diversa indicazione, il testo è distribuito con licenza Creative Commons Attribuzione 4.0 Internazionale (CC BY 4.0), 
-che consente di copiarlo, distribuirlo e modificarlo, anche per fini commerciali, purché siano riconosciuti gli autori, citata la fonte, fornito un collegamento alla licenza e indicate le eventuali modifiche.
+Salvo diversa indicazione, il testo e i codici sono distribuiti con licenza Creative Commons Attribuzione 4.0 Internazionale (CC BY 4.0), 
+che consente di copiarli, distribuirli e modificarli, anche per fini commerciali, purché siano riconosciuti gli autori, citata la fonte, fornito un collegamento alla licenza e indicate le eventuali modifiche.
 
 I programmi descritti restano soggetti alle rispettive licenze d’uso. Per il software open source, i diritti di utilizzo, modifica e redistribuzione e i relativi obblighi sono stabiliti dalla licenza di ciascun progetto, secondo i criteri della Open Source Definition dell’Open Source Initiative.
 
-Le istruzioni usano lo script [`setup_physcode.sh`](setup_physcode.sh), incluso nel repository, per installare Pixi e preparare l’ambiente PhysCode.
+Le istruzioni usano lo script [`installPhysCode`](installPhysCode), incluso nel repository, per installare Pixi e preparare l’ambiente PhysCode.
 
 Scegliete il vostro sistema operativo:
 
@@ -125,43 +125,31 @@ git -C "$HOME/PhysCode" pull --ff-only
 Eseguite lo script incluso nel repository:
 
 ```bash
-bash "$HOME/PhysCode/setup_physcode.sh"
+bash "$HOME/PhysCode/installPhysCode"
 ```
 
-Usate `bash`, senza `source` e senza anteporre `sudo`. Lo script chiederà la password quando necessaria; durante la digitazione la password non viene mostrata.
+Lo script chiederà la password quando necessaria; durante la digitazione la password non viene mostrata.
 
 Lo script:
 
-- installa Pixi se non è già disponibile e, su macOS, Homebrew se necessario;
+- install su macOs Homebrew (se necessatio);
+- installa Pixi se non è già disponibile;
 - installa l’ambiente definito nel file `pixi.toml`;
 - configura l’avvio automatico dell’ambiente PhysCode nei nuovi terminali Bash o Zsh.
 
-Git e il repository vengono preparati nei passaggi precedenti: lo script non li installa né li aggiorna.
 
 La prima installazione può richiedere diversi minuti. Attendete il messaggio **«Fatto: chiudi e riapri il terminale.»**, quindi chiudete e riaprite il terminale (Ubuntu, su Windows).
 
-Se lo script richiede l’installazione dei Command Line Tools, completatela e rilanciate lo stesso comando. In caso di errore, correggete il problema segnalato e rieseguite lo script.
 
-La configurazione viene salvata in `~/.zshrc` per Zsh, in `~/.bash_profile` per Bash su macOS e in `~/.bashrc` per Bash su Linux/WSL. Prima della modifica viene creata una copia con estensione `.bak`, sovrascritta a ogni esecuzione. Per Bash, l’avvio automatico richiede che il terminale legga il file indicato.
+La configurazione viene salvata in `~/.zshrc` per Zsh, in `~/.bash_profile` per Bash su macOS e in `~/.bashrc` per Bash su Linux/WSL. Prima della modifica viene creata una copia con estensione `.bak`, sovrascritta a ogni esecuzione. 
 
 ## Usare PhysCode
 
-Nei nuovi terminali l’ambiente PhysCode viene attivato automaticamente. Sono disponibili Python con NumPy, SciPy, Matplotlib, pandas e JupyterLab, oltre a compilatori C/C++, CMake, Emacs e ROOT.
+Nei nuovi terminali l’ambiente PhysCode viene attivato automaticamente.
+L'ambiente di lavoro comprende Python con NumPy, SciPy, Matplotlib, pandas e JupyterLab, oltre a compilatori C/C++, CMake, all'editor Emacs e  alle librerie ROOT.
 
-Se volete attivare l’ambiente manualmente, usate:
+Per uscire, digitate `exit`: i programmi installati e i file salvati restano disponibili, mentre si disattivano le impostazioni dell’ambiente nella shell corrente.
 
-```bash
-pixi shell --manifest-path "$HOME/PhysCode/pixi.toml"
-```
-
-Eseguite questo comando soltanto quando non siete già nell’ambiente. Per uscire, digitate `exit`: i programmi installati e i file salvati restano disponibili, mentre si disattivano le impostazioni dell’ambiente nella shell corrente.
-
-Per aggiornare PhysCode:
-
-```bash
-git -C "$HOME/PhysCode" pull --ff-only
-bash "$HOME/PhysCode/setup_physcode.sh"
-```
 
 ## Alphaplot
 
