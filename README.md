@@ -1,5 +1,16 @@
 # PhysCode - Installazione software per i Corsi di Studio in Fisica
 
+[C. Cardinale, F.Parodi, F.Sforza, M. Sotgia, S. Turchikhin]
+
+Le presenti istruzioni descrivono come installare sul proprio computer portatile il software di base necessario 
+per gli insegnamenti dei corsi di laurea in Fisica e di laurea magistrale in Fisica dell’Università di Genova.
+
+La condivisione, il riutilizzo e l’adattamento di questo materiale sono incoraggiati. 
+Salvo diversa indicazione, il testo è distribuito con licenza Creative Commons Attribuzione 4.0 Internazionale (CC BY 4.0), 
+che consente di copiarlo, distribuirlo e modificarlo, anche per fini commerciali, purché siano riconosciuti gli autori, citata la fonte, fornito un collegamento alla licenza e indicate le eventuali modifiche.
+
+I programmi descritti restano soggetti alle rispettive licenze d’uso. Per il software open source, i diritti di utilizzo, modifica e redistribuzione e i relativi obblighi sono stabiliti dalla licenza di ciascun progetto, secondo i criteri della Open Source Definition dell’Open Source Initiative.
+
 Le istruzioni dipendono dal sistema operativo di cui si dispone e si basano sul gestore di pacchetti Pixi.
 
 [Windows](#windows)
