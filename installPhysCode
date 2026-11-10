@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 # Setup PhysCode (WSL/Linux con apt, macOS con Homebrew).
 # Dopo aver clonato il repository in ~/PhysCode:
-# Uso: bash "$HOME/PhysCode/setup_physcode.sh"
 
 # Non usare source: lo script deve essere eseguito in un processo Bash separato.
 if [ -z "${BASH_VERSION:-}" ]; then
-    echo "Esegui con: bash setup_physcode.sh" >&2
+    echo "Esegui con: bash installPhysCode" >&2
     return 1 2>/dev/null || exit 1
 fi
 if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
-    echo "Esegui con: bash setup_physcode.sh (senza source)." >&2
+    echo "Esegui con: bash installPhysCode (senza source)." >&2
     return 1
 fi
 
@@ -65,7 +64,7 @@ if [ "$OS" = Darwin ]; then
     else
         echo "Avvio la richiesta d'installazione dei Command Line Tools."
         xcode-select --install
-        echo "Completa l'installazione, poi rilancia: bash setup_physcode.sh"
+        echo "Completa l'installazione, poi rilancia: bash installPhysCode"
         exit 0
     fi
 
@@ -130,13 +129,24 @@ elif [ -x /usr/local/bin/brew ]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 export PATH="$HOME/.pixi/bin:$PATH"
-# PHYSCODE_AUTOSTART evita che la shell interna rilanci pixi shell.
+# Avvia Pixi una sola volta.
 if [[ $- == *i* && -z "${PHYSCODE_AUTOSTART:-}" ]]; then
-  if command -v pixi >/dev/null 2>&1; then
-    if cd "$HOME"; then
-      PHYSCODE_AUTOSTART=1 pixi shell --manifest-path "$HOME/PhysCode/pixi.toml"
+    if command -v pixi >/dev/null 2>&1; then
+        if cd "$HOME"; then
+            PHYSCODE_AUTOSTART=1 pixi shell \
+                --change-ps1 false \
+                --manifest-path "$HOME/PhysCode/pixi.toml"
+        fi
     fi
-  fi
+fi
+# Imposta il prompt nella shell interna di PhysCode.
+if [[ $- == *i* && "${PHYSCODE_AUTOSTART:-}" == 1 ]]; then
+    if [ -n "${ZSH_VERSION:-}" ]; then
+        setopt PROMPT_PERCENT
+        PROMPT='%n@PhysCode > '
+    else
+        PS1='\u@PhysCode > '
+    fi
 fi
 # <<< PhysCode <<<
 EOF
