@@ -2,7 +2,7 @@
 
 [C. Cardinale, F.Parodi, F.Sforza, M. Sotgia, S. Turchikhin]
 
-Le presenti istruzioni descrivono come installare sul proprio computer portatile il software di base necessario 
+Le presenti istruzioni descrivono come installare sul proprio computer il software di base necessario 
 per gli insegnamenti dei corsi di Laurea in Fisica e di Laurea Magistrale in Fisica dell’Università di Genova.
 
 La condivisione, il riutilizzo e l’adattamento di questo materiale sono incoraggiati. 
