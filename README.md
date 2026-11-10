@@ -84,6 +84,8 @@ curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
 bash /tmp/install-pixi.sh
 ```
 
+Chiudete e riaprite il terminale, in modo che il comando `pixi` sia riconosciuto.
+
 Installate git (se non presente)
 ```bash
 sudo apt update
@@ -105,6 +107,8 @@ Installate Pixi con i seguenti comandi:
 curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
 bash /tmp/install-pixi.sh
 ```
+
+Chiudete e riaprite il terminale, in modo che il comando `pixi` sia riconosciuto.
 
 Installate git (se non presente)
 ```bash
@@ -139,7 +143,7 @@ Installate brew:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Installate Git e Pixi il seguente comando:
+Installate Git e Pixi con i seguenti comandi:
 
 ```bash
 brew install git
@@ -155,13 +159,15 @@ git clone https://github.com/fabrizio-parodi/PhysCode.git
 
 ## Usare Pixi (tutti i sistemi operativi)
 
-Dalla cartella del progetto che contiene `pixi.toml`, date:
+Dalla cartella del progetto che contiene `pixi.toml` (cioè `PhysCode`), date:
 
 ```bash
+cd ~/PhysCode
 pixi shell
 ```
 
-Nella shell sono disponibili tutti gli strumenti necessari per il corso (g++, emacs, root).
+Nella shell sono disponibili tutti gli strumenti necessari per il corso (Python con numpy, scipy, matplotlib, pandas e JupyterLab, g++, cmake, emacs, root).
+Alla prima esecuzione Pixi scarica e installa i pacchetti, quindi può essere necessario qualche minuto.
 Date `exit` per uscire (attenzione quando uscite dalla shell di Pixi perdete tutte le configurazioni).
 
 
@@ -223,7 +229,7 @@ XQuartz dopo la modifica e lasciatelo in esecuzione mentre utilizzate AlphaPlot.
 
 I file del container sono nella cartella `alphaplot` del repository PhysCode. 
 
-Una volta avviato Docker Desktop, dalla directory `CalcoloXFisica` lanciate:
+Una volta avviato Docker Desktop, lanciate:
 
 ```bash
 cd "$HOME/PhysCode"
@@ -240,7 +246,7 @@ A questo punto, per aprire l’applicazione, eseguite lo script
 #### Rendere il comando disponibile da qualunque cartella
 
 Per poter eseguire lo script in qualunque momento, aggiungete al `PATH` la
-posizione della sua directory. Da dentro `CalcoloXFisica/alphaplot/`, eseguite
+posizione della sua directory. Da dentro `PhysCode/alphaplot/`, eseguite
 una volta:
 
 ```bash
@@ -348,35 +354,3 @@ ls /mnt/c/Users/ACCOUNT_PRINCIPALE/Desktop
 Dalla versione 1903 di Windows basta andare su \\wsl$\Ubuntu-24.04\home\user
 
 Per versioni meno recenti invece: da Windows sul File Explorer digitare: C:\[USERNAME]\AppData\Local\Packages quindi entrate nella cartella che inizia con CanonicalGroup…. e poi da questa su LocalState\rootfs
-
-
-
-<a id="macchina-virtuale"></a>
-
-## If all else fails…
-
-Se nessuna delle procedure illustrate funziona suggeriamo l’installazione di una macchina virtuale.
-
-Ecco i passi da seguire in questo caso:
-
-[Abilitare la virtualizzazione su Windows](https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-c5578302-6e43-4b4b-a449-8ced115f58e1)
-
-Installare [VirtualBox 7.1.0](https://www.virtualbox.org/)
-
-Installare anche l’ Extension Pack di VirtualBox (sempre versione 7.1.0)
-
-Scaricare la macchina virtuale:
-
-Ubuntu 24.04: [Ubuntu64.ova](https://drive.google.com/file/d/15HLRRobGohfF7JslssCji1r2R16mEvuc/view?usp=drive_link)
-
-Da VirtualBox, selezionare la voce del menù “File → Import appliance” e caricare il file .ova precedentemente scompattato
-
-(attenzione: affinché questa operazione vada a buon fine dovete avere almeno 10 GB di spazio disco liberi).
-
-Collegatevi (username: vboxuser  password: calcolo24 )
-
-### Regolate il display
-
-Sul client Linux  nel menu generale (in alto a sinistra) cercate Settings → Display e regolate una risoluzione simile a quella del vostro schermo.
-
-Potete eventualmente aggiustare ancora il fattore di scala da VirtualBox andando nel menù: View → Virtual Screen 1
