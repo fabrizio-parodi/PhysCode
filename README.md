@@ -23,11 +23,11 @@ Una volta configurato il sistema l'utilizzo  è comune ai vari sistemi operativi
 
 [Usare Pixi](#usare-pixi)
 
-Come installare Alphaplot (per Laboratorio 1)
+Per l'insegnamento di Laboratorio di Fisica 1  è richiesta l'installazione di Alphaplot
 
 [Alphaplot](#alphaplot)
 
-Sono inoltre disponibili alcune soluzioni specifiche per problemi tecnici che potreste incontrare su WSL:
+Si riportano inoltre alcune soluzioni specifiche per problemi tecnici che potreste incontrare su WSL:
 
 [Tastiera italiana](#tastiera-italiana)
 
