@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+# Setup PhysCode (WSL/Linux con apt, macOS con Homebrew).
+# Dopo aver clonato il repository in ~/PhysCode:
+# Uso: bash "$HOME/PhysCode/setup_physcode.sh"
+
+# Non usare source: lo script deve essere eseguito in un processo Bash separato.
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Esegui con: bash setup_physcode.sh" >&2
+    return 1 2>/dev/null || exit 1
+fi
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+    echo "Esegui con: bash setup_physcode.sh (senza source)." >&2
+    return 1
+fi
+
+set -euo pipefail
+
+if [ "$(id -u)" -eq 0 ]; then
+    echo "Non eseguire come root." >&2
+    exit 1
+fi
+
+if [ ! -f "$HOME/PhysCode/pixi.toml" ]; then
+    echo "Repository non trovato: clona PhysCode in ~/PhysCode come indicato nel README." >&2
+    exit 1
+fi
+
+OS="$(uname -s)"
+case "$OS" in
+    Darwin) ;;
+    Linux)
+        if ! command -v apt >/dev/null 2>&1; then
+            echo "Questo script supporta Linux/WSL con apt." >&2
+            exit 1
+        fi
+        ;;
+    *)
+        echo "Sistema non supportato: $OS" >&2
+        exit 1
+        ;;
+esac
+
+# --- File di configurazione della shell
+case "$(basename "${SHELL:-}")" in
+    zsh)
+        RC="$HOME/.zshrc"
+        ;;
+    bash)
+        if [ "$OS" = Darwin ]; then
+            RC="$HOME/.bash_profile"
+        else
+            RC="$HOME/.bashrc"
+        fi
+        ;;
+    *)
+        echo "Shell non supportata (${SHELL:-non impostata})." >&2
+        exit 1
+        ;;
+esac
+
+if [ "$OS" = Darwin ]; then
+    # --- macOS
+    if xcode-select -p >/dev/null 2>&1; then
+        echo "Command Line Tools presenti"
+    else
+        echo "Avvio la richiesta d'installazione dei Command Line Tools."
+        xcode-select --install
+        echo "Completa l'installazione, poi rilancia: bash setup_physcode.sh"
+        exit 0
+    fi
+
+    # Rende disponibile anche Homebrew installato ma assente dal PATH.
+    if ! command -v brew >/dev/null 2>&1; then
+        if [ -x /opt/homebrew/bin/brew ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -x /usr/local/bin/brew ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+    fi
+
+    if command -v brew >/dev/null 2>&1; then
+        echo "Homebrew presente"
+    else
+        echo "Homebrew non trovato. Procedo all'installazione..."
+        BREW_INSTALLER="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        /bin/bash -c "$BREW_INSTALLER"
+        unset BREW_INSTALLER
+        if [ -x /opt/homebrew/bin/brew ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -x /usr/local/bin/brew ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+    fi
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "Homebrew non disponibile dopo l'installazione." >&2
+        exit 1
+    fi
+
+    brew list --formula pixi >/dev/null 2>&1 || brew install pixi
+else
+    # --- Linux o WSL con apt
+    sudo apt update
+    sudo apt install -y curl
+    export PATH="$HOME/.pixi/bin:$PATH"
+    if ! command -v pixi >/dev/null 2>&1; then
+        PIXI_INSTALLER="$(mktemp)"
+        trap 'rm -f "$PIXI_INSTALLER"' EXIT
+        curl -fsSL https://pixi.sh/install.sh -o "$PIXI_INSTALLER"
+        bash "$PIXI_INSTALLER"
+        rm -f "$PIXI_INSTALLER"
+        trap - EXIT
+    fi
+fi
+
+# --- Ambiente PhysCode (repository gia scaricato seguendo il README)
+cd "$HOME/PhysCode"
+# Riduce gli avvisi, senza abilitare gli script post-link.
+pixi -q install
+
+# Modifica la configurazione soltanto dopo l'installazione riuscita.
+touch "$RC"
+# Conserva la configurazione precedente in "$RC.bak".
+sed -i.bak '/# >>> PhysCode/,/# <<< PhysCode/d' "$RC"
+
+cat >> "$RC" <<'EOF'
+# >>> PhysCode >>>
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+export PATH="$HOME/.pixi/bin:$PATH"
+# PHYSCODE_AUTOSTART evita che la shell interna rilanci pixi shell.
+if [[ $- == *i* && -z "${PHYSCODE_AUTOSTART:-}" ]]; then
+  if command -v pixi >/dev/null 2>&1; then
+    if cd "$HOME"; then
+      PHYSCODE_AUTOSTART=1 pixi shell --manifest-path "$HOME/PhysCode/pixi.toml"
+    fi
+  fi
+fi
+# <<< PhysCode <<<
+EOF
+
+echo "Fatto: chiudi e riapri il terminale."
