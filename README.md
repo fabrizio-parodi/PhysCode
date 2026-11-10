@@ -20,7 +20,7 @@ Sono inoltre disponibili alcune soluzioni specifiche per problemi tecnici che po
 
 [Tastiera italiana](#tastiera-italiana)
 
-[Carattere ~](#carattere-~)
+[Carattere ~](#caratteri-speciali)
 
 [Copia-Linux-Windows](#copia-linux-windows)
 
@@ -30,7 +30,7 @@ Sono inoltre disponibili alcune soluzioni specifiche per problemi tecnici che po
 
 Assicuratevi che il vostro sistema operativo sia aggiornato all’ultima versione disponibile (le istruzioni nel seguito sono valide sia per Windows 10 che per Windows11, con piccole varianti).
 
-Cercare il terminale di comando Command Prompt e aprirlo premendo il tasto destro del mouse Run as Administrator
+Cercate il terminale di comando Command Prompt e apritelo premendo il tasto destro del mouse e selezionando Run as Administrator
 
 Aggiornare wsl
 
@@ -56,8 +56,6 @@ Riavviare ed accedere al sistema Linux (sotto Ubuntu)
 
 ATTENZIONE ALLA PASSWORD: È NECESSARIO inserire la password richiesta al primo accesso sul sistema Linux.La password NON è visibile durante la digitazione quindi assicurarsi di inserirla correttamente (e annotarla), e solo DOPO premere “Invio”. Se la procedura non viene seguita correttamente, l’utente del sistema Linux risulta essere “root”, cioè l'amministratore di sistema (o super-utente). In questo caso la procedura di installazione va ripetuta.
 
-
-### Installazione software aggiuntivo
 
 Aprite il terminale di Ubuntu.
 
@@ -87,9 +85,8 @@ Aprite il terminale nella cartella del progetto che contiene `pixi.toml` e
 `pixi.lock`, quindi date il comando:
 
 ```bash
-pixi install --locked
+pixi install 
 ```
-
 
 A questo punto il software necessario è disponibile.
 
@@ -101,7 +98,6 @@ equivalente a quello usato in laboratorio.
 Non servono configurazioni aggiuntive: gli strumenti di sviluppo quali il
 compilatore C++ e l’editor Emacs sono installati nell’ambiente Pixi.
 
-### Software aggiuntivo
 
 Aprite il terminale sulla HOME (si ottiene dando il comando `cd` da terminale).
 
@@ -118,28 +114,22 @@ Date il comando:
 
 ```bash
 git clone https://github.com/fabrizio-parodi/PhysCode.git
+
 ```
 e poi:
 ```bash
+
 cd PhysCode
 ```
-
 ```bash
-pixi install --locked
+pixi install 
 ```
 
-Una volta terminato, solo per il primo anno, date anche il comando, dalla
-cartella in cui avete clonato `CalcoloXFisica`:
-
-```bash
-source CalcoloXFisica/installAlphaPlot
-```
 
 ## Mac OsX
 
 Mac OsX è Unix, quindi di fatto molto simile a Linux.
 
-### Software aggiuntivo
 
 Verificare di avere il command line di Xcode funzionante (e, altrimenti,
 installatelo) con il comando:
@@ -153,11 +143,16 @@ e date il comando:
 
 ```bash
 git clone https://github.com/fabrizio-parodi/PhysCode.git
+
 ```
 e poi
 
 ```bash
 cd PhysCode
+```
+
+Installate brew:
+```bash
 ```
 Installate Pixi con:
 
@@ -170,9 +165,6 @@ pixi install --locked
 ```
 
 
-Installate AlphaPlot seguendo le istruzioni su
-[https://alphaplot.sourceforge.io/](https://alphaplot.sourceforge.io/).
-
 ## Usare Pixi (tutti i sistemi operativi)
 
 Dalla cartella del progetto che contiene `pixi.toml`, date:
@@ -181,24 +173,122 @@ Dalla cartella del progetto che contiene `pixi.toml`, date:
 pixi shell
 ```
 
-Nella shell sono disponibili gli strumenti installati per il corso.
-Date `exit` per uscire (attenzione quando uscite dalla shell di Pixi perdete tutte le configurazioni)
+Nella shell sono disponibili tutti gli strumenti necessari per il corso (g++, emacs, root).
+Date `exit` per uscire (attenzione quando uscite dalla shell di Pixi perdete tutte le configurazioni).
 
 
 ## Alphaplot
 
-### WSL e Linux
-Sempre dalla cartella Physcode date il comando:
+AlphaPlot è utilizzato per Laboratorio 1 e si installa separatamente
+all’ambiente Pixi.
+
+### WSL, Linux e OsX (Intel)
+
+Lo script di installazione è nel repository PhysCode (che avete scaricato nei passi precedenti). 
+
+Installate AlphaPlot con:
 
 ```bash
-source installAlphaPlot
+source "$HOME/PhysCode/installAlphaPlot"
 ```
-### MacOsx
+
 Per eseguire AlphaPlot serve il comando:
 
 ```bash
 flatpak run io.github.narunlifescience.AlphaPlot
 ```
+
+### Mac OsX
+
+Se avete un Macbook con chip M o in generale se avete problemi con le istruzioni precedenti
+vi forniamo un container Docker che permette di usarne una versione containerizzata su Linux/Ubuntu 24.04 LTS.
+
+#### Installazione di Docker Desktop
+
+Per utilizzare il container è necessario avere Docker Desktop installato e
+avviato sul Mac. Con Homebrew già disponibile, date:
+
+```bash
+brew install --cask docker-desktop
+```
+
+Aprite quindi **Docker** dalla cartella Applicazioni e completate il primo
+avvio. Questa operazione potrebbe richiedere qualche tempo e qualche GB di
+spazio sul disco. Per i dettagli consultate
+[l’installazione ufficiale per Mac](https://docs.docker.com/desktop/setup/install/mac-install/).
+
+#### Installazione di XQuartz
+
+Per utilizzare l’interfaccia grafica è necessaria anche una versione
+installata di XQuartz, ottenibile con:
+
+```bash
+brew install --cask xquartz
+```
+
+Dopo l’installazione, aprite XQuartz e andate nelle impostazioni con la
+scorciatoia **⌘+,**. Nella sezione **Security** assicuratevi che sia attivata
+l’opzione **Allow connections from network clients**. Chiudete e riaprite
+XQuartz dopo la modifica e lasciatelo in esecuzione mentre utilizzate AlphaPlot.
+
+#### Costruzione del container
+
+I file del container sono nella cartella `alphaplot` del repository PhysCode. 
+
+Una volta avviato Docker Desktop, dalla directory `CalcoloXFisica` lanciate:
+
+```bash
+cd "$HOME/PhysCode"
+docker build -t alphaplot alphaplot/
+```
+
+A questo punto, per aprire l’applicazione, eseguite lo script
+`alphaplot/start.sh`:
+
+```bash
+./alphaplot/start.sh
+```
+
+#### Rendere il comando disponibile da qualunque cartella
+
+Per poter eseguire lo script in qualunque momento, aggiungete al `PATH` la
+posizione della sua directory. Da dentro `CalcoloXFisica/alphaplot/`, eseguite
+una volta:
+
+```bash
+cd "$HOME/PhysCode/alphaplot"
+printf '\nexport PATH="$PATH:%s"\n' "$PWD" >> "$HOME/.zshrc"
+```
+
+Aprite un nuovo terminale. Il comando `start.sh` sarà raggiungibile da qualunque
+cartella:
+
+```bash
+start.sh
+```
+
+Docker Desktop e XQuartz devono essere in esecuzione prima di avviare lo script.
+
+#### Utilizzo e salvataggio dei progetti
+
+Poiché state utilizzando un container, il filesystem — dove vengono salvati i
+file — non è lo stesso del vostro computer.
+
+Quando volete **salvare** un progetto di AlphaPlot, è **FONDAMENTALE**, per non
+perdere i progressi, scegliere **Home** (in alto a sinistra) e poi la sottocartella
+**AlphaPlot**, nella finestra che compare selezionando
+**File → Save Project (Ctrl+S)**.
+
+![Cartella AlphaPlot da usare per salvare i progetti](assets/alphaplot/fig.png)
+
+Questa cartella corrisponde alla cartella `alphaplot-data` sul vostro computer,
+raggiungibile con:
+
+```bash
+cd ~/alphaplot-data
+```
+
+Salvate lì i progetti da conservare anche dopo la chiusura del container.
 
 
 ## Tastiera italiana
