@@ -3,7 +3,7 @@
 [C. Cardinale, F.Parodi, F.Sforza, M. Sotgia, S. Turchikhin]
 
 Le presenti istruzioni descrivono come installare sul proprio computer portatile il software di base necessario 
-per gli insegnamenti dei corsi di laurea in Fisica e di laurea magistrale in Fisica dell’Università di Genova.
+per gli insegnamenti dei corsi di Laurea in Fisica e di Laurea Magistrale in Fisica dell’Università di Genova.
 
 La condivisione, il riutilizzo e l’adattamento di questo materiale sono incoraggiati. 
 Salvo diversa indicazione, il testo è distribuito con licenza Creative Commons Attribuzione 4.0 Internazionale (CC BY 4.0), 
@@ -61,15 +61,22 @@ Installare Ubuntu24 con il comando
 
 ```powershell
 wsl --install -d Ubuntu-24.04
+
 ```
 
-Riavviare ed accedere al sistema Linux (sotto Ubuntu)
+Al termine dovrebbe avviarsi Ubuntu automaticamente.
 
-ATTENZIONE ALLA PASSWORD: È NECESSARIO inserire la password richiesta al primo accesso sul sistema Linux.La password NON è visibile durante la digitazione quindi assicurarsi di inserirla correttamente (e annotarla), e solo DOPO premere “Invio”. Se la procedura non viene seguita correttamente, l’utente del sistema Linux risulta essere “root”, cioè l'amministratore di sistema (o super-utente). In questo caso la procedura di installazione va ripetuta.
+Se non fosse così avviatelo con
 
+```powershell
+wsl -d Ubuntu-24.04
+
+```
+Al primo avvio, attendete il completamento della configurazione e create il vostro account Linux, scegliendo un nome utente e una password.
+
+ATTENZIONE ALLA PASSWORD: la password NON è visibile durante la digitazione quindi assicurarsi di inserirla correttamente (e annotarla), e solo DOPO premere “Invio”. Se la procedura non viene seguita correttamente, l’utente del sistema Linux risulta essere “root”, cioè l'amministratore di sistema (o super-utente). In questo caso la procedura di installazione va ripetuta.
 
 Aprite il terminale di Ubuntu.
-
 Installate Pixi con i seguenti comandi:
 
 ```bash
@@ -77,104 +84,74 @@ curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
 bash /tmp/install-pixi.sh
 ```
 
-Chiudete e riaprite il terminale.
-
-Quindi date il comando:
+Installate git (se non presente)
+```bash
+apt update
+apt install git
+```
+Quindi date i comandi per installare PhysCode:
 
 ```bash
+cd
 git clone https://github.com/fabrizio-parodi/PhysCode.git
 ```
-e poi:
-
-```bash
-cd PhysCode
-```
-
-Il software scientifico è installato tramite Pixi: Python, ROOT, Geant4,
-compilatori C/C++, CMake ed Emacs sono inclusi nell’ambiente.
-Aprite il terminale nella cartella del progetto che contiene `pixi.toml` e
-`pixi.lock`, quindi date il comando:
-
-```bash
-pixi install 
-```
-
-A questo punto il software necessario è disponibile.
 
 
 ## Linux
 
-La descrizione vale per una qualunque distribuzione Linux. L’ambiente è
-equivalente a quello usato in laboratorio.
-Non servono configurazioni aggiuntive: gli strumenti di sviluppo quali il
-compilatore C++ e l’editor Emacs sono installati nell’ambiente Pixi.
-
-
-Aprite il terminale sulla HOME (si ottiene dando il comando `cd` da terminale).
-
-Se Pixi non è già installato, date i comandi:
-
+Aprite il terminale.
+Installate Pixi con i seguenti comandi:
 ```bash
 curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
 bash /tmp/install-pixi.sh
 ```
 
-Chiudete e riaprite il terminale.
+Installate git (se non presente)
+```bash
+apt update
+apt install git
+```
 
-Date il comando:
+Quindi date i comandi per installare PhysCode:
 
 ```bash
+cd
 git clone https://github.com/fabrizio-parodi/PhysCode.git
+```
 
-```
-e poi:
-```bash
-
-cd PhysCode
-```
-```bash
-pixi install 
-```
 
 
 ## Mac OsX
 
 Mac OsX è Unix, quindi di fatto molto simile a Linux.
 
+Aprite un terminale.
 
-Verificare di avere il command line di Xcode funzionante (e, altrimenti,
+Verificare di avere il command line funzionante (e, altrimenti,
 installatelo) con il comando:
 
 ```bash
 xcode-select --install
 ```
 
-Aprite il terminale sulla HOME (si ottiene dando il comando `cd` da terminale)
-e date il comando:
-
-```bash
-git clone https://github.com/fabrizio-parodi/PhysCode.git
-
-```
-e poi
-
-```bash
-cd PhysCode
-```
-
 Installate brew:
 ```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-Installate Pixi con:
+
+Installate Git e Pixi il seguente comando:
 
 ```bash
+brew install git
 brew install pixi
 ```
 
-```bash
-pixi install --locked
-```
+Quindi date i comandi per installare PhysCode:
 
+```bash
+cd
+git clone https://github.com/fabrizio-parodi/PhysCode.git
+```
 
 ## Usare Pixi (tutti i sistemi operativi)
 
