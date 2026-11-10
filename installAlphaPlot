@@ -1,0 +1,8 @@
+echo "Installazione AlphaPlot"
+sudo apt update
+yes Y | sudo apt install flatpak
+yes Y | sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+sudo flatpak install -y flathub io.github.narunlifescience.AlphaPlot
+echo "Il programma andra runnato con il comando:"
+echo "  flatpak run io.github.narunlifescience.AlphaPlot"
+
