@@ -86,8 +86,8 @@ bash /tmp/install-pixi.sh
 
 Installate git (se non presente)
 ```bash
-apt update
-apt install git
+sudo apt update
+sudo apt install git
 ```
 Quindi date i comandi per installare PhysCode:
 
@@ -108,8 +108,8 @@ bash /tmp/install-pixi.sh
 
 Installate git (se non presente)
 ```bash
-apt update
-apt install git
+sudo apt update
+sudo apt install git
 ```
 
 Quindi date i comandi per installare PhysCode:
