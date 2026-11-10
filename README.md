@@ -11,29 +11,17 @@ che consente di copiarlo, distribuirlo e modificarlo, anche per fini commerciali
 
 I programmi descritti restano soggetti alle rispettive licenze d’uso. Per il software open source, i diritti di utilizzo, modifica e redistribuzione e i relativi obblighi sono stabiliti dalla licenza di ciascun progetto, secondo i criteri della Open Source Definition dell’Open Source Initiative.
 
-Le istruzioni dipendono dal sistema operativo di cui si dispone e si basano sul gestore di pacchetti Pixi.
+Le istruzioni usano lo script [`setup_physcode.sh`](setup_physcode.sh), incluso nel repository, per installare Pixi e preparare l’ambiente PhysCode.
 
-[Windows](#windows)
+Scegliete il vostro sistema operativo:
 
-[Linux](#linux)
+- [Windows con WSL](#windows)
+- [Linux](#linux)
+- [macOS](#macos)
 
-[Mac OsX](#mac-osx)
+Poi seguite [Configurazione di PhysCode](#configurazione-di-physcode) e [Usare PhysCode](#usare-physcode).
 
-Una volta configurato il sistema l'utilizzo  è comune ai vari sistemi operativi
-
-[Usare Pixi](#usare-pixi)
-
-Per l'insegnamento di Laboratorio di Fisica 1  è richiesta l'installazione di Alphaplot
-
-[Alphaplot](#alphaplot)
-
-Si riportano inoltre alcune soluzioni specifiche per problemi tecnici che potreste incontrare su WSL:
-
-[Tastiera italiana](#tastiera-italiana)
-
-[Carattere ~](#caratteri-speciali)
-
-[Copia-Linux-Windows](#copia-linux-windows)
+Per Laboratorio di Fisica 1 consultate anche [AlphaPlot](#alphaplot). In fondo trovate indicazioni sulla [tastiera italiana](#tastiera-italiana), sul [carattere ~](#caratteri-speciali) e sullo [scambio di file tra Linux e Windows](#accesso-ai-file).
 
 ## Windows
 
@@ -76,100 +64,104 @@ Al primo avvio, attendete il completamento della configurazione e create il vost
 
 ATTENZIONE ALLA PASSWORD: la password NON è visibile durante la digitazione quindi assicurarsi di inserirla correttamente (e annotarla), e solo DOPO premere “Invio”. Se la procedura non viene seguita correttamente, l’utente del sistema Linux risulta essere “root”, cioè l'amministratore di sistema (o super-utente). In questo caso la procedura di installazione va ripetuta.
 
-Aprite il terminale di Ubuntu.
-Installate Pixi con i seguenti comandi:
+Aprite il terminale di Ubuntu e installate Git:
 
-```bash
-curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
-bash /tmp/install-pixi.sh
-```
-
-Chiudete e riaprite il terminale, in modo che il comando `pixi` sia riconosciuto.
-
-Installate git (se non presente)
 ```bash
 sudo apt update
-sudo apt install git
-```
-Quindi date i comandi per installare PhysCode:
-
-```bash
-cd
-git clone https://github.com/fabrizio-parodi/PhysCode.git
+sudo apt install -y git
 ```
 
+Proseguite con [Configurazione di PhysCode](#configurazione-di-physcode), eseguendo i comandi nel terminale di Ubuntu.
 
 ## Linux
 
-Aprite il terminale.
-Installate Pixi con i seguenti comandi:
-```bash
-curl -fsSL https://pixi.sh/install.sh -o /tmp/install-pixi.sh
-bash /tmp/install-pixi.sh
-```
+Lo script supporta distribuzioni con `apt`, come Ubuntu e Debian, e shell Bash o Zsh.
 
-Chiudete e riaprite il terminale, in modo che il comando `pixi` sia riconosciuto.
+Aprite il terminale e installate Git:
 
-Installate git (se non presente)
 ```bash
 sudo apt update
-sudo apt install git
+sudo apt install -y git
 ```
 
-Quindi date i comandi per installare PhysCode:
+Proseguite con [Configurazione di PhysCode](#configurazione-di-physcode).
+
+## macOS
+
+Aprite **Terminale** e verificate che siano disponibili i Command Line Tools di Apple:
 
 ```bash
-cd
-git clone https://github.com/fabrizio-parodi/PhysCode.git
+xcode-select -p
 ```
 
-
-
-## Mac OsX
-
-Mac OsX è Unix, quindi di fatto molto simile a Linux.
-
-Aprite un terminale.
-
-Verificare di avere il command line funzionante (e, altrimenti,
-installatelo) con il comando:
+Se il comando restituisce un errore, avviate l’installazione con:
 
 ```bash
 xcode-select --install
 ```
 
-Installate brew:
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-Installate Git e Pixi con i seguenti comandi:
+Completate l’installazione nella finestra che si apre prima di continuare. I Command Line Tools includono Git; potete verificarlo con:
 
 ```bash
-brew install git
-brew install pixi
+git --version
 ```
 
-Quindi date i comandi per installare PhysCode:
+Proseguite con [Configurazione di PhysCode](#configurazione-di-physcode). Lo script installerà Homebrew, se necessario, e Pixi; supporta sia Mac Intel sia Mac con chip Apple Silicon.
+
+## Configurazione di PhysCode
+
+Scaricate il repository nella vostra cartella personale:
 
 ```bash
-cd
-git clone https://github.com/fabrizio-parodi/PhysCode.git
+git clone https://github.com/fabrizio-parodi/PhysCode.git "$HOME/PhysCode"
 ```
 
-## Usare Pixi (tutti i sistemi operativi)
-
-Dalla cartella del progetto che contiene `pixi.toml` (cioè `PhysCode`), date:
+Se avete già scaricato il repository in quella posizione, aggiornate invece la copia esistente:
 
 ```bash
-cd ~/PhysCode
-pixi shell
+git -C "$HOME/PhysCode" pull --ff-only
 ```
 
-Nella shell sono disponibili tutti gli strumenti necessari per il corso (Python con numpy, scipy, matplotlib, pandas e JupyterLab, g++, cmake, emacs, root).
-Alla prima esecuzione Pixi scarica e installa i pacchetti, quindi può essere necessario qualche minuto.
-Date `exit` per uscire (attenzione quando uscite dalla shell di Pixi perdete tutte le configurazioni).
+Eseguite lo script incluso nel repository:
 
+```bash
+bash "$HOME/PhysCode/setup_physcode.sh"
+```
+
+Usate `bash`, senza `source` e senza anteporre `sudo`. Lo script chiederà la password quando necessaria; durante la digitazione la password non viene mostrata.
+
+Lo script:
+
+- installa Pixi se non è già disponibile e, su macOS, Homebrew se necessario;
+- installa l’ambiente definito nel file `pixi.toml`;
+- configura l’avvio automatico dell’ambiente PhysCode nei nuovi terminali Bash o Zsh.
+
+Git e il repository vengono preparati nei passaggi precedenti: lo script non li installa né li aggiorna.
+
+La prima installazione può richiedere diversi minuti. Attendete il messaggio **«Fatto: chiudi e riapri il terminale.»**, quindi chiudete e riaprite il terminale (Ubuntu, su Windows).
+
+Se lo script richiede l’installazione dei Command Line Tools, completatela e rilanciate lo stesso comando. In caso di errore, correggete il problema segnalato e rieseguite lo script.
+
+La configurazione viene salvata in `~/.zshrc` per Zsh, in `~/.bash_profile` per Bash su macOS e in `~/.bashrc` per Bash su Linux/WSL. Prima della modifica viene creata una copia con estensione `.bak`, sovrascritta a ogni esecuzione. Per Bash, l’avvio automatico richiede che il terminale legga il file indicato.
+
+## Usare PhysCode
+
+Nei nuovi terminali l’ambiente PhysCode viene attivato automaticamente. Sono disponibili Python con NumPy, SciPy, Matplotlib, pandas e JupyterLab, oltre a compilatori C/C++, CMake, Emacs e ROOT.
+
+Se volete attivare l’ambiente manualmente, usate:
+
+```bash
+pixi shell --manifest-path "$HOME/PhysCode/pixi.toml"
+```
+
+Eseguite questo comando soltanto quando non siete già nell’ambiente. Per uscire, digitate `exit`: i programmi installati e i file salvati restano disponibili, mentre si disattivano le impostazioni dell’ambiente nella shell corrente.
+
+Per aggiornare PhysCode:
+
+```bash
+git -C "$HOME/PhysCode" pull --ff-only
+bash "$HOME/PhysCode/setup_physcode.sh"
+```
 
 ## Alphaplot
 
