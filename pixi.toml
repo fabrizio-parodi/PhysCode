@@ -20,6 +20,7 @@ c-compiler = "*"
 cxx-compiler = "*"
 emacs = ">=30,<32"
 markdown = ">=3.11.3,<4"
+iminuit = ">=2.33.0,<3"
 
 [activation]
 scripts = ["scripts/activate.sh"]

@@ -92,6 +92,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/hepmc3-3.3.1-py312hd711b43_6.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/hicolor-icon-theme-0.17-hfc2019e_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/icu-78.3-py310h44b86e0_2.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/iminuit-2.33.0-py312h80505a6_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/json-c-0.18-hebe6cf0_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/keyutils-1.6.3-h7cc23a3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/kiwisolver-1.5.1-py312h9be0db6_3.conda
@@ -455,6 +456,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/hepmc3-3.3.1-py312h525da04_6.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/hicolor-icon-theme-0.17-h22914b5_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/icu-78.3-py311h3512406_2.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/iminuit-2.33.0-py312ha0853ce_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/json-c-0.18-h29ee22c_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/keyutils-1.6.3-h5bc82ec_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/kiwisolver-1.5.1-py312he33898b_3.conda
@@ -900,6 +902,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/hepmc3-3.3.1-py312h65a63f7_6.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/hicolor-icon-theme-0.17-h9b258c2_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/icu-78.3-py313hbf1d544_2.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/iminuit-2.33.0-py312haab1465_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/kiwisolver-1.5.1-py312hcba6f97_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/krb5-1.22.2-h69064fd_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/lcms2-2.20-h4e6bd4b_0.conda
@@ -1196,6 +1199,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/hepmc3-3.3.1-py312h0f050c9_6.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/hicolor-icon-theme-0.17-h5ce3bf5_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/icu-78.3-py310h579977c_2.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/iminuit-2.33.0-py312hdef455b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/kiwisolver-1.5.1-py312h67ba313_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/krb5-1.22.2-h34f8a20_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/lcms2-2.20-hce41798_0.conda
@@ -2388,6 +2392,21 @@ packages:
     - icu >=78.3,<79.0a0
   size: 14459115
   timestamp: 1786545741408
+- conda: https://conda.anaconda.org/conda-forge/linux-64/iminuit-2.33.0-py312h80505a6_0.conda
+  sha256: 3b82d126912ec02d8a11b32b033b82e39a252709751191f8fc35e6f9f846b315
+  md5: 18f92bb8f620a3c73c25da9a5a879e29
+  depends:
+  - python
+  - numpy
+  - libstdcxx >=15
+  - libgcc >=15
+  - __glibc >=2.17,<3.0.a0
+  - python_abi 3.12.* *_cp312
+  license: LGPL-2.0-or-later
+  license_family: LGPL
+  run_exports: {}
+  size: 634273
+  timestamp: 1789854027883
 - conda: https://conda.anaconda.org/conda-forge/linux-64/json-c-0.18-hebe6cf0_2.conda
   sha256: 78ec5a672acc8a6bf9c74268b88a72230809517aebe75a11acf959d3f9a63fe0
   md5: 9aa77c4e7f9a988df94da18a7b9b90fe
@@ -6261,6 +6280,20 @@ packages:
     - icu >=78.3,<79.0a0
   size: 14688525
   timestamp: 1786545779464
+- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/iminuit-2.33.0-py312ha0853ce_0.conda
+  sha256: 979841105360d801f194439bbb6bd5490533642455d92967094235243ac8de22
+  md5: 25efa6cad32a088bd6eb61616e7d6e81
+  depends:
+  - python
+  - numpy
+  - libgcc >=15
+  - libstdcxx >=15
+  - python_abi 3.12.* *_cp312
+  license: LGPL-2.0-or-later
+  license_family: LGPL
+  run_exports: {}
+  size: 614608
+  timestamp: 1789854011625
 - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/json-c-0.18-h29ee22c_2.conda
   sha256: b26d0c7ec2bd6c7e6d7cc8ae6fa1e8c60f1fbda07327a56225f8f487c37e71e5
   md5: 9d68a996cd125be9bb3a79468be85d78
@@ -10979,6 +11012,20 @@ packages:
     - icu >=78.3,<79.0a0
   size: 14223209
   timestamp: 1786545868538
+- conda: https://conda.anaconda.org/conda-forge/osx-64/iminuit-2.33.0-py312haab1465_0.conda
+  sha256: 65a98c417d12d870253d7c3fbb945892b654a36948a1efd6ce4ba8a95e4d0779
+  md5: 7a86c42a9d7671de485adaaf3f1e3dbd
+  depends:
+  - python
+  - numpy
+  - libcxx >=21
+  - __osx >=11.0
+  - python_abi 3.12.* *_cp312
+  license: LGPL-2.0-or-later
+  license_family: LGPL
+  run_exports: {}
+  size: 623683
+  timestamp: 1789854063491
 - conda: https://conda.anaconda.org/conda-forge/osx-64/kiwisolver-1.5.1-py312hcba6f97_3.conda
   sha256: f25b60645b27b49959e82bd64218bb3d131eca11081f6706baf7b3ad8454800e
   md5: 69cbb436d894338bd0db54680c107666
@@ -13675,6 +13722,20 @@ packages:
     - icu >=78.3,<79.0a0
   size: 14070242
   timestamp: 1786545847761
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/iminuit-2.33.0-py312hdef455b_0.conda
+  sha256: 143ed371c4b75564f6aa791c8da37d5c3f8e629a9d8d2f3a78e4926f4873416e
+  md5: 5ec346cb18f2e9c9fc1ba1d70ec6479c
+  depends:
+  - python
+  - numpy
+  - libcxx >=21
+  - __osx >=11.0
+  - python_abi 3.12.* *_cp312
+  license: LGPL-2.0-or-later
+  license_family: LGPL
+  run_exports: {}
+  size: 591190
+  timestamp: 1789854023322
 - conda: https://conda.anaconda.org/conda-forge/osx-arm64/kiwisolver-1.5.1-py312h67ba313_3.conda
   sha256: e0a06e17ddad0aad4a035524ef67ca14d0772ebc080f4eb3e3905ecf0b7a0a34
   md5: 0f9c3cfcf6106a7f6e99acf39095d3a6
