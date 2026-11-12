@@ -135,6 +135,7 @@ if [[ $- == *i* && -z "${PHYSCODE_AUTOSTART:-}" ]]; then
         if cd "$HOME"; then
             PHYSCODE_AUTOSTART=1 pixi shell \
                 --change-ps1 false \
+		--frozen \
                 --manifest-path "$HOME/PhysCode/pixi.toml"
         fi
     fi
